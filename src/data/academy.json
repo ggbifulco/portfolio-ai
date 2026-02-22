@@ -1,0 +1,10 @@
+{
+  "courses": [
+    { "slug": "mastering-rag", "title": "Mastering RAG", "modules": 12, "level": "Advanced", "gradient": "from-red-900 to-red-600", "category": "RAG", "image": "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=800", "description": "Deep dive into Retrieval-Augmented Generation architectures.", "videos": [] },
+    { "slug": "ai-agents", "title": "AI Agents Ecosystem", "modules": 8, "level": "Intermediate", "gradient: "from-red-800 to-red-500", "category": "Agents", "image": "https://images.unsplash.com/photo-1664575602276-acd073f104c1?auto=format&fit=crop&q=80&w=800", "description": "Building autonomous agents with CrewAI." }
+  ],
+  "pills": [
+    { "id": 1, "title": "Ollama & Docker Setup", "duration": "5 min", "category": "Ops", "image": "https://images.unsplash.com/photo-1605810230434-7631ac76ec81?auto=format&fit=crop&q=80&w=400" },
+    { "id": 2, "title": "Llama 3.1 Overview", "duration": "8 min", "category": "Models", "image": "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&q=80&w=400" }
+  ]
+}

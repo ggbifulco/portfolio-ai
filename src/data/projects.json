@@ -1,0 +1,29 @@
+[
+  { 
+    "slug": "documind", 
+    "title": "DocuMind", 
+    "desc": "Advanced RAG system with Hybrid Search.", 
+    "tech": ["LlamaIndex", "Milvus", "Python"], 
+    "image": "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=800",
+    "fullDesc": "Questo progetto affronta la sfida di scalare architetture neurali in ambienti di produzione. L'obiettivo primario è stato ottimizzare il tempo di inferenza senza sacrificare la precisione dei risultati.",
+    "commands": ["git clone https://github.com/tuo-username/documind.git", "pip install -r requirements.txt", "python main.py"]
+  },
+  { 
+    "slug": "agentdesk", 
+    "title": "AgentDesk", 
+    "desc": "Multi-agent autonomous system for market research.", 
+    "tech": ["CrewAI", "Claude 3.5", "React"], 
+    "image": "https://images.unsplash.com/photo-1664575602276-acd073f104c1?auto=format&fit=crop&q=80&w=800",
+    "fullDesc": "Descrizione estesa per AgentDesk...",
+    "commands": ["npm install", "npm run dev"]
+  },
+  { 
+    "slug": "slimitelligence", 
+    "title": "SlimIntelligence", 
+    "desc": "Quantized Local LLM fine-tuned with QLoRA.", 
+    "tech": ["Unsloth", "PyTorch", "GGUF"], 
+    "image": "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&q=80&w=800",
+    "fullDesc": "Descrizione estesa per SlimIntelligence...",
+    "commands": ["python train.py"]
+  }
+]
