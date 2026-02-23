@@ -105,6 +105,7 @@ function HomeContent() {
   );
 }
 
+// Version Stable 1.0 - Ready for Deploy
 export default function Home() {
   return (
     <main className="h-screen w-screen overflow-hidden bg-black relative font-sans">
