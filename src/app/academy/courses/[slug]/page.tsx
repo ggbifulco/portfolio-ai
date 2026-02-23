@@ -11,7 +11,10 @@ import { coursesData } from "@/components/Academy";
 export default function CourseDetail() {
   const { t } = useLanguage();
   const params = useParams();
-  const course = coursesData.find(c => c.slug === params.slug) || coursesData[0];
+  const slug = params?.slug as string;
+  
+  // Forziamo il tipo a any per evitare errori di build sulla proprietà 'videos'
+  const course = (coursesData.find(c => c.slug === slug) || coursesData[0]) as any;
 
   return (
     <main className="bg-black min-h-screen text-white pb-32 font-sans">
@@ -20,7 +23,7 @@ export default function CourseDetail() {
       {/* Course Header */}
       <section className="pt-48 pb-20 px-10 border-b border-white/5 bg-[radial-gradient(circle_at_50%_0%,rgba(153,0,36,0.15),transparent_50%)]">
         <div className="max-w-5xl mx-auto">
-          <Link href="/academy" className="inline-flex items-center gap-2 text-red-700 font-bold mb-12 hover:gap-4 transition-all uppercase tracking-widest text-xs">
+          <Link href="/?s=academy" className="inline-flex items-center gap-2 text-red-700 font-bold mb-12 hover:gap-4 transition-all uppercase tracking-widest text-xs">
             <ArrowLeft size={16} /> Back to Academy
           </Link>
 
@@ -62,39 +65,39 @@ export default function CourseDetail() {
           </h2>
 
           <div className="space-y-6">
-            {course && course.videos && course.videos.length > 0 ? course.videos.map((video, idx) => (
-              <motion.div 
-                key={video.id}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: idx * 0.1 }}
-                className="group flex flex-col md:flex-row gap-8 p-6 bg-white/5 border border-white/5 rounded-[2rem] hover:bg-white/[0.08] hover:border-red-900/30 transition-all cursor-pointer"
-              >
-                {/* Thumbnail */}
-                <div className="w-full md:w-72 aspect-video rounded-2xl overflow-hidden relative border border-white/5">
-                  <img src={video.thumb} alt={video.title} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" />
-                  <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <PlayCircle size={48} className="text-white drop-shadow-2xl" />
+            {course && course.videos && course.videos.length > 0 ? (
+              course.videos.map((video: any, idx: number) => (
+                <motion.div 
+                  key={video.id}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: idx * 0.1 }}
+                  className="group flex flex-col md:flex-row gap-8 p-6 bg-white/5 border border-white/5 rounded-[2rem] hover:bg-white/[0.08] hover:border-red-900/30 transition-all cursor-pointer"
+                >
+                  <div className="w-full md:w-72 aspect-video rounded-2xl overflow-hidden relative border border-white/5">
+                    <img src={video.thumb} alt={video.title} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" />
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <PlayCircle size={48} className="text-white drop-shadow-2xl" />
+                    </div>
+                    <div className="absolute bottom-3 right-3 px-2 py-1 bg-black/80 backdrop-blur-md rounded-lg text-[10px] font-bold text-white border border-white/10">
+                      {video.duration}
+                    </div>
                   </div>
-                  <div className="absolute bottom-3 right-3 px-2 py-1 bg-black/80 backdrop-blur-md rounded-lg text-[10px] font-bold text-white border border-white/10">
-                    {video.duration}
-                  </div>
-                </div>
 
-                {/* Info */}
-                <div className="flex-grow flex flex-col justify-center">
-                  <span className="text-[10px] font-black text-red-700 uppercase tracking-widest mb-2">Lesson {video.id}</span>
-                  <h3 className="text-2xl font-bold text-white mb-3 group-hover:text-red-500 transition-colors">{video.title}</h3>
-                  <p className="text-gray-500 text-sm font-light leading-relaxed max-w-xl">{video.desc}</p>
-                </div>
-
-                <div className="hidden md:flex items-center">
-                  <div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center group-hover:border-red-700 group-hover:bg-red-900 transition-all">
-                    <PlayCircle size={24} className="text-white" />
+                  <div className="flex-grow flex flex-col justify-center">
+                    <span className="text-[10px] font-black text-red-700 uppercase tracking-widest mb-2">Lesson {video.id}</span>
+                    <h3 className="text-2xl font-bold text-white mb-3 group-hover:text-red-500 transition-colors">{video.title}</h3>
+                    <p className="text-gray-500 text-sm font-light leading-relaxed max-w-xl">{video.desc}</p>
                   </div>
-                </div>
-              </motion.div>
-            )) : (
+
+                  <div className="hidden md:flex items-center">
+                    <div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center group-hover:border-red-700 group-hover:bg-red-900 transition-all">
+                      <PlayCircle size={24} className="text-white" />
+                    </div>
+                  </div>
+                </motion.div>
+              ))
+            ) : (
               <div className="p-20 text-center bg-white/5 border border-white/5 border-dashed rounded-[3rem]">
                 <PlayCircle size={48} className="mx-auto text-gray-700 mb-6" />
                 <p className="text-gray-500 uppercase tracking-widest text-sm font-bold">Videos coming soon...</p>
