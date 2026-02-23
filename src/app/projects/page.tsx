@@ -31,28 +31,28 @@ export default function ProjectsArchive() {
     <main className="bg-black min-h-screen text-white font-sans">
       <Navbar />
       
-      <section className="pt-40 pb-12 px-10 border-b border-white/5 bg-[radial-gradient(circle_at_50%_-20%,rgba(153,0,36,0.1),transparent_50%)]">
+      <section className="pt-28 sm:pt-36 lg:pt-40 pb-8 sm:pb-12 px-4 sm:px-6 lg:px-10 border-b border-white/5 bg-[radial-gradient(circle_at_50%_-20%,rgba(153,0,36,0.1),transparent_50%)]">
         <div className="max-w-7xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="max-w-2xl">
-            <h1 className="text-5xl md:text-6xl font-black uppercase tracking-tighter mb-4 leading-none text-white">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black uppercase tracking-tighter mb-3 sm:mb-4 leading-none text-white">
               {t.projects.title}
             </h1>
-            <p className="text-gray-400 text-lg leading-relaxed font-light mb-8">
+            <p className="text-gray-400 text-base sm:text-lg leading-relaxed font-light mb-6 sm:mb-8">
               Tutti i case studies e le soluzioni implementate.
             </p>
-            
-            <a href="https://github.com/tuo-username" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-3 px-8 py-4 bg-red-900 text-white border border-red-700 rounded-xl hover:bg-white hover:text-black hover:border-white transition-all uppercase tracking-widest text-[10px] font-black shadow-lg group">
-              <Github size={16} className="group-hover:scale-110 transition-transform" /> 
+
+            <a href="https://github.com/tuo-username" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-3 px-6 sm:px-8 py-3 sm:py-4 bg-red-900 text-white border border-red-700 rounded-xl hover:bg-white hover:text-black hover:border-white transition-all uppercase tracking-widest text-[10px] font-black shadow-lg group">
+              <Github size={16} className="group-hover:scale-110 transition-transform" />
               {t.projects.github}
             </a>
           </motion.div>
         </div>
       </section>
 
-      <section className="pt-12 pb-20 px-10">
+      <section className="pt-8 sm:pt-12 pb-16 sm:pb-20 px-4 sm:px-6 lg:px-10">
         <div className="max-w-7xl mx-auto">
           
-          <div className="flex flex-col lg:flex-row gap-8 mb-16 items-start lg:items-center">
+          <div className="flex flex-col lg:flex-row gap-4 sm:gap-8 mb-8 sm:mb-16 items-start lg:items-center">
             <div className="relative w-full max-w-md group">
               <Search size={18} className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-600 group-hover:text-red-700 transition-colors" />
               <input 
@@ -82,7 +82,7 @@ export default function ProjectsArchive() {
             </div>
           </div>
 
-          <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+          <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-12">
             <AnimatePresence mode="popLayout">
               {filteredProjects.map((project, idx) => (
                 <motion.div

@@ -21,32 +21,32 @@ export default function CourseDetail() {
       <Navbar />
       
       {/* Course Header */}
-      <section className="pt-48 pb-20 px-10 border-b border-white/5 bg-[radial-gradient(circle_at_50%_0%,rgba(153,0,36,0.15),transparent_50%)]">
+      <section className="pt-28 sm:pt-36 lg:pt-48 pb-10 sm:pb-16 lg:pb-20 px-4 sm:px-6 lg:px-10 border-b border-white/5 bg-[radial-gradient(circle_at_50%_0%,rgba(153,0,36,0.15),transparent_50%)]">
         <div className="max-w-5xl mx-auto">
-          <Link href="/?s=academy" className="inline-flex items-center gap-2 text-red-700 font-bold mb-12 hover:gap-4 transition-all uppercase tracking-widest text-xs">
+          <Link href="/?s=academy" className="inline-flex items-center gap-2 text-red-700 font-bold mb-8 sm:mb-12 hover:gap-4 transition-all uppercase tracking-widest text-xs">
             <ArrowLeft size={16} /> Back to Academy
           </Link>
 
-          <div className="flex flex-col gap-6">
-            <div className="flex items-center gap-4">
-              <span className="px-4 py-1.5 bg-red-950/20 border border-red-900/30 rounded-full text-[10px] font-black text-red-600 uppercase tracking-widest">
+          <div className="flex flex-col gap-4 sm:gap-6">
+            <div className="flex flex-wrap items-center gap-3 sm:gap-4">
+              <span className="px-3 sm:px-4 py-1.5 bg-red-950/20 border border-red-900/30 rounded-full text-[10px] font-black text-red-600 uppercase tracking-widest">
                 {course.level}
               </span>
               <span className="flex items-center gap-2 text-gray-500 text-[10px] font-bold uppercase tracking-widest">
                 <Layers size={14} /> {course.modules} Modules
               </span>
             </div>
-            
-            <h1 className="text-6xl md:text-8xl font-black uppercase tracking-tighter leading-none mb-4">
+
+            <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-8xl font-black uppercase tracking-tighter leading-none mb-2 sm:mb-4">
               {course.title}
             </h1>
-            <p className="text-gray-400 text-xl max-w-3xl leading-relaxed italic border-l-4 border-red-900 pl-8 py-2">
+            <p className="text-gray-400 text-base sm:text-lg lg:text-xl max-w-3xl leading-relaxed italic border-l-4 border-red-900 pl-4 sm:pl-8 py-2">
               {course.description}
             </p>
 
-            <div className="flex items-center gap-3 mt-4">
-              <div className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center">
-                <User size={20} className="text-red-700" />
+            <div className="flex items-center gap-3 mt-2 sm:mt-4">
+              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center">
+                <User size={18} className="text-red-700" />
               </div>
               <div>
                 <p className="text-[8px] uppercase font-bold text-gray-600 leading-none mb-1">Instructor</p>
@@ -58,9 +58,9 @@ export default function CourseDetail() {
       </section>
 
       {/* Video Playlist Section */}
-      <section className="py-24 px-10">
+      <section className="py-12 sm:py-16 lg:py-24 px-4 sm:px-6 lg:px-10">
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-2xl font-black uppercase tracking-widest mb-12 text-white flex items-center gap-4">
+          <h2 className="text-xl sm:text-2xl font-black uppercase tracking-widest mb-8 sm:mb-12 text-white flex items-center gap-4">
             Course Content <div className="h-px flex-grow bg-white/5" />
           </h2>
 

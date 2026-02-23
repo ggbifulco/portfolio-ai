@@ -55,22 +55,22 @@ export default function AcademyArchive() {
       <Navbar />
       
       {/* Header */}
-      <section className="pt-40 pb-12 px-10 border-b border-white/5 bg-[radial-gradient(circle_at_50%_-20%,rgba(153,0,36,0.1),transparent_50%)]">
+      <section className="pt-28 sm:pt-36 lg:pt-40 pb-8 sm:pb-12 px-4 sm:px-6 lg:px-10 border-b border-white/5 bg-[radial-gradient(circle_at_50%_-20%,rgba(153,0,36,0.1),transparent_50%)]">
         <div className="max-w-7xl mx-auto">
-          <Link href="/?s=academy" className="inline-flex items-center gap-2 text-red-700 font-bold mb-8 hover:gap-4 transition-all uppercase tracking-widest text-[10px]">
+          <Link href="/?s=academy" className="inline-flex items-center gap-2 text-red-700 font-bold mb-6 sm:mb-8 hover:gap-4 transition-all uppercase tracking-widest text-[10px]">
             <ArrowLeft size={14} /> Academy Home
           </Link>
-          <h1 className="text-5xl md:text-6xl font-black uppercase tracking-tighter mb-4 leading-none text-white">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black uppercase tracking-tighter mb-3 sm:mb-4 leading-none text-white">
             AI <span className="text-red-800">ACADEMY</span>
           </h1>
-          <p className="text-gray-400 text-lg leading-relaxed font-light max-w-2xl">
+          <p className="text-gray-400 text-base sm:text-lg leading-relaxed font-light max-w-2xl">
             La libreria completa dei percorsi strutturati e delle pillole tecnologiche rapide.
           </p>
         </div>
       </section>
 
       {/* --- SEZIONE CORSI --- */}
-      <section id="all-courses" className="py-20 px-10 border-b border-white/5 scroll-mt-24">
+      <section id="all-courses" className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-10 border-b border-white/5 scroll-mt-24">
         <div className="max-w-7xl mx-auto">
           <div className="mb-12">
             <h2 className="text-3xl font-black uppercase tracking-widest mb-8 flex items-center gap-4">
@@ -117,7 +117,7 @@ export default function AcademyArchive() {
       </section>
 
       {/* --- SEZIONE TECH PILLS --- */}
-      <section id="all-pills" className="py-24 px-10 scroll-mt-24">
+      <section id="all-pills" className="py-12 sm:py-16 lg:py-24 px-4 sm:px-6 lg:px-10 scroll-mt-24">
         <div className="max-w-7xl mx-auto">
           <div className="mb-12">
             <h2 className="text-3xl font-black uppercase tracking-widest mb-8 flex items-center gap-4">

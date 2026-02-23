@@ -3,15 +3,18 @@ import React, { useEffect, useState } from "react";
 import { motion, useMotionValue } from "framer-motion";
 
 export default function CustomCursor() {
-  // Usiamo direttamente MotionValue senza molla per eliminare il ritardo di inseguimento
   const mouseX = useMotionValue(-100);
   const mouseY = useMotionValue(-100);
-
   const [isHovering, setIsHovering] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
+    // Don't show custom cursor on touch/pointer-coarse devices (mobile, tablet)
+    if (window.matchMedia("(pointer: coarse)").matches) return;
+
+    setIsVisible(true);
+
     const handleMouseMove = (e: MouseEvent) => {
-      // Movimento diretto e istantaneo
       mouseX.set(e.clientX);
       mouseY.set(e.clientY);
     };
@@ -19,9 +22,9 @@ export default function CustomCursor() {
     const handleMouseOver = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       if (
-        target.tagName === "A" || 
-        target.tagName === "BUTTON" || 
-        target.closest("button") || 
+        target.tagName === "A" ||
+        target.tagName === "BUTTON" ||
+        target.closest("button") ||
         target.closest("a") ||
         target.classList.contains("cursor-pointer")
       ) {
@@ -40,6 +43,8 @@ export default function CustomCursor() {
     };
   }, [mouseX, mouseY]);
 
+  if (!isVisible) return null;
+
   return (
     <motion.div
       style={{
@@ -50,15 +55,13 @@ export default function CustomCursor() {
       }}
       animate={{
         scale: isHovering ? 2.5 : 1,
-        // Colore bordeaux vivido che reagisce con mix-blend-difference
         borderColor: isHovering ? "#990024" : "#6b001a",
         backgroundColor: isHovering ? "rgba(153, 0, 36, 0.1)" : "rgba(0, 0, 0, 0)",
       }}
-      transition={{ 
-        type: "spring", 
-        stiffness: 500, // Molto veloce per l'espansione
+      transition={{
+        type: "spring",
+        stiffness: 500,
         damping: 30,
-        // Nessun transition per left/top per evitare l'effetto inseguimento
         left: { duration: 0 },
         top: { duration: 0 }
       }}
