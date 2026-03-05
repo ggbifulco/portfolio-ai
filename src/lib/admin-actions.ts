@@ -14,6 +14,10 @@ const CONFIG: any = {
 };
 
 async function fetchGitHub(path: string, method = "GET", body?: any) {
+  if (!GITHUB_TOKEN) {
+    throw new Error("GITHUB_TOKEN non configurato nelle variabili d'ambiente");
+  }
+
   const url = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${path}`;
   const res = await fetch(url, {
     method,
@@ -25,6 +29,12 @@ async function fetchGitHub(path: string, method = "GET", body?: any) {
     body: body ? JSON.stringify(body) : undefined,
     cache: "no-store"
   });
+
+  if (!res.ok) {
+    const errData = await res.json();
+    throw new Error(`GitHub API Error (${res.status}): ${errData.message || res.statusText}`);
+  }
+
   return res.json();
 }
 
@@ -35,20 +45,25 @@ export async function getContentList(type: string) {
     if (!Array.isArray(data)) return [];
 
     const list = await Promise.all(data.map(async (file: any) => {
-      const fileData = await fetchGitHub(file.path);
-      const content = Buffer.from(fileData.content, "base64").toString("utf8");
-      const { data: metadata, content: body } = matter(content);
-      return {
-        slug: file.name.replace(".md", ""),
-        content: body,
-        ...metadata,
-        sha: fileData.sha
-      };
+      try {
+        const fileData = await fetchGitHub(file.path);
+        const content = Buffer.from(fileData.content, "base64").toString("utf8");
+        const { data: metadata, content: body } = matter(content);
+        return {
+          slug: file.name.replace(".md", ""),
+          content: body,
+          ...metadata,
+          sha: fileData.sha
+        };
+      } catch (e) {
+        console.error(`Error fetching file ${file.path}:`, e);
+        return null;
+      }
     }));
-    return list;
-  } catch (err) {
-    console.error("Error fetching content list from GitHub:", err);
-    return [];
+    return list.filter(item => item !== null);
+  } catch (err: any) {
+    console.error("Error in getContentList:", err);
+    throw new Error(err.message);
   }
 }
 
@@ -75,7 +90,7 @@ export async function saveContent(type: string, slug: string, content: string, m
     return { success: true };
   } catch (err: any) {
     console.error("Error saving content to GitHub:", err);
-    throw new Error(err.message || "Failed to save to GitHub");
+    throw new Error(err.message);
   }
 }
 

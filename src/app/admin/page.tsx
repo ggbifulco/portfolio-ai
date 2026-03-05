@@ -19,6 +19,7 @@ export default function AdminDashboard() {
   const [editContent, setEditContent] = useState("");
   const [editMetadata, setEditMetadata] = useState<any>({});
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,20 +32,25 @@ export default function AdminDashboard() {
   };
 
   const loadItems = async (type: string) => {
+    setLoading(true);
+    setError(null);
     try {
       const list = await getContentList(type);
       setItems(list);
       setActiveType(type);
       setSelectedItem(null);
-    } catch (err) {
+    } catch (err: any) {
       console.error("Load error:", err);
+      setError(err.message || "Errore durante il caricamento dei dati da GitHub.");
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleEdit = (item: any) => {
     setSelectedItem(item);
     setEditContent(item.content || "");
-    const { content, ...metadata } = item;
+    const { content, sha, ...metadata } = item;
     setEditMetadata(metadata);
   };
 
@@ -102,31 +108,44 @@ export default function AdminDashboard() {
           ))}
         </div>
 
+        {error && (
+          <div className="mb-8 p-4 bg-red-950/20 border border-red-900 text-red-500 rounded-xl text-xs font-mono">
+            <strong>ERRORE:</strong> {error}
+          </div>
+        )}
+
         <div className="flex gap-10">
           <div className="w-1/3 border-r border-white/5 pr-10 h-[calc(100vh-350px)] overflow-y-auto">
-            <div className="space-y-4">
-              {items.map(a => (
-                <div 
-                  key={a.slug} 
-                  onClick={() => handleEdit(a)}
-                  className={`p-4 rounded-xl cursor-pointer transition-all border ${
-                    selectedItem?.slug === a.slug ? "bg-red-900/20 border-red-900" : "bg-zinc-900/50 border-white/5 hover:border-white/20"
-                  }`}
-                >
-                  <p className="font-bold text-sm">{a.title || a.slug}</p>
-                  <p className="text-xs text-gray-500">{a.slug}</p>
-                </div>
-              ))}
-            </div>
+            {loading && items.length === 0 ? (
+              <div className="text-gray-600 uppercase tracking-widest text-[10px] animate-pulse">Caricamento da GitHub...</div>
+            ) : (
+              <div className="space-y-4">
+                {items.map(a => (
+                  <div 
+                    key={a.slug} 
+                    onClick={() => handleEdit(a)}
+                    className={`p-4 rounded-xl cursor-pointer transition-all border ${
+                      selectedItem?.slug === a.slug ? "bg-red-900/20 border-red-900" : "bg-zinc-900/50 border-white/5 hover:border-white/20"
+                    }`}
+                  >
+                    <p className="font-bold text-sm">{a.title || a.slug}</p>
+                    <p className="text-xs text-gray-500">{a.slug}</p>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           <div className="w-2/3">
             {selectedItem ? (
               <div className="space-y-6">
-                <h2 className="text-xl font-bold uppercase tracking-widest mb-4">Editing: {selectedItem.slug}</h2>
+                <div className="flex justify-between items-center mb-4">
+                  <h2 className="text-xl font-bold uppercase tracking-widest">Editing: {selectedItem.slug}</h2>
+                  <span className="text-[10px] font-mono text-gray-600">SHA: {selectedItem.sha?.substring(0,7)}</span>
+                </div>
                 
                 <div className="grid grid-cols-2 gap-4">
-                  {Object.keys(editMetadata).filter(k => !["slug", "content"].includes(k)).map(key => (
+                  {Object.keys(editMetadata).filter(k => !["slug", "content", "sha"].includes(k)).map(key => (
                     <div key={key}>
                       <label className="text-[8px] uppercase tracking-widest text-gray-500 font-black mb-1 block">{key}</label>
                       <input 
@@ -152,11 +171,13 @@ export default function AdminDashboard() {
                   disabled={loading}
                   className={`px-10 py-4 bg-red-900 text-white font-bold rounded-xl uppercase tracking-widest shadow-lg hover:bg-white hover:text-black transition-all ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
                 >
-                  {loading ? "Salvataggio..." : "Salva Modifiche"}
+                  {loading ? "Sincronizzazione GitHub..." : "Salva e Pusha su GitHub"}
                 </button>
               </div>
             ) : (
-              <div className="h-full flex items-center justify-center text-gray-700 uppercase tracking-widest text-xs font-black">Seleziona un elemento per iniziare l'editing</div>
+              <div className="h-full flex items-center justify-center text-gray-700 uppercase tracking-widest text-xs font-black">
+                {loading ? "In attesa di GitHub..." : "Seleziona un elemento per iniziare l'editing"}
+              </div>
             )}
           </div>
         </div>
