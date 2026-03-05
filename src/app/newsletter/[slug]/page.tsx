@@ -1,4 +1,4 @@
-"use client";
+import Script from "next/script";`n"use client";
 import React, { useEffect, useState } from "react";
 import Navbar from "@/components/Navbar";
 import { motion } from "framer-motion";
@@ -27,7 +27,13 @@ export default function NewsDetail() {
     h1: ({node, ...props}: any) => <h1 className="text-4xl font-black uppercase tracking-tighter mb-10 mt-16 text-white border-b-2 border-red-700 pb-4" {...props} />,
     h2: ({node, ...props}: any) => <h2 className="text-2xl font-black uppercase tracking-tight mb-8 mt-12 text-white flex items-center gap-3"><span className="w-2 h-8 bg-red-700 block"></span>{props.children}</h2>,
     h3: ({node, ...props}: any) => <h3 className="text-xl font-bold uppercase mb-6 mt-10 text-red-500" {...props} />,
-    p: ({node, ...props}: any) => <p className="mb-8 leading-relaxed text-gray-300 text-lg font-light text-justify" {...props} />,
+    p: ({node, ...props}: any) => {
+      const content = props.children;
+      if (typeof content === "string" && content.startsWith("$") && content.endsWith("$")) {
+        return <div className="math-block my-12 text-center text-white bg-red-950/10 p-8 rounded-2xl border border-red-900/10 overflow-x-auto shadow-inner">{content.slice(2, -2)}</div>;
+      }
+      return <p className="mb-8 leading-relaxed text-gray-300 text-lg font-light text-justify" {...props} />;
+    },
     ul: ({node, ...props}: any) => <ul className="list-disc list-outside mb-8 space-y-4 text-gray-300 ml-6" {...props} />,
     li: ({node, ...props}: any) => <li className="pl-2" {...props} />,
     strong: ({node, ...props}: any) => <strong className="font-bold text-white bg-red-900/20 px-1 rounded" {...props} />,
@@ -63,7 +69,7 @@ export default function NewsDetail() {
   };
 
   return (
-    <main className="bg-black min-h-screen text-white pb-32 font-sans">
+    <main><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" integrity="sha384-nAnmEnC99465+3+8c+X6pW9d3+69N9N9N9N9N9N9N9N9N9N9N9N9N9N9N9N9N9" crossorigin="anonymous" /> className="bg-black min-h-screen text-white pb-32 font-sans">
       <Navbar />
       <section className="pt-28 sm:pt-36 lg:pt-48 pb-10 sm:pb-16 lg:pb-20 px-4 sm:px-6 lg:px-10 border-b border-white/5 bg-[radial-gradient(circle_at_50%_0%,rgba(153,0,36,0.1),transparent_50%)]">
         <div className="max-w-4xl mx-auto">
@@ -89,7 +95,18 @@ export default function NewsDetail() {
       <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-10">
         <div className="max-w-3xl mx-auto">
           <div className="markdown-content text-gray-300">
-            <ReactMarkdown components={markdownComponents}>{content}</ReactMarkdown>
+            <ReactMarkdown components={markdownComponents}>{content}</ReactMarkdown><Script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" strategy="afterInteractive" onLoad={() => {
+    document.querySelectorAll(".math-block").forEach((el) => {
+        try {
+            (window as any).katex.render(el.textContent, el, { displayMode: true, throwOnError: false });
+        } catch (e) { console.error(e); }
+    });
+    document.querySelectorAll(".math-inline").forEach((el) => {
+        try {
+            (window as any).katex.render(el.textContent, el, { displayMode: false, throwOnError: false });
+        } catch (e) { console.error(e); }
+    });
+}} />
           </div>
         </div>
       </section>
