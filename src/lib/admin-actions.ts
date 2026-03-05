@@ -1,54 +1,53 @@
 ﻿"use server";
-import fs from "fs";
-import path from "path";
 import matter from "gray-matter";
 
-const BASE_CONTENT_DIR = path.join(process.cwd(), "src", "content");
+const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
+const OWNER = process.env.GITHUB_OWNER || "ggbifulco";
+const REPO = process.env.GITHUB_REPO || "portfolio-ai";
+const BRANCH = "main";
 
 const CONFIG: any = {
-  newsletter: {
-    dir: "newsletter",
-    registry: "src/components/Newsletter.tsx",
-    marker: "export const newsIssues = ["
-  },
-  projects: {
-    dir: "projects",
-    registry: "src/data/projects.json",
-    isJson: true
-  },
-  courses: {
-    dir: "academy/courses",
-    registry: "src/components/Academy.tsx",
-    marker: "export const coursesData = ["
-  },
-  pills: {
-    dir: "academy/pills",
-    registry: "src/components/Academy.tsx",
-    marker: "export const pillsData = ["
-  }
+  newsletter: { dir: "src/content/newsletter", registry: "src/components/Newsletter.tsx", marker: "export const newsIssues = [" },
+  projects: { dir: "src/content/projects", registry: "src/data/projects.json", isJson: true },
+  courses: { dir: "src/content/academy/courses", registry: "src/components/Academy.tsx", marker: "export const coursesData = [" },
+  pills: { dir: "src/content/academy/pills", registry: "src/components/Academy.tsx", marker: "export const pillsData = [" }
 };
+
+async function fetchGitHub(path: string, method = "GET", body?: any) {
+  const url = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${path}`;
+  const res = await fetch(url, {
+    method,
+    headers: {
+      Authorization: `Bearer ${GITHUB_TOKEN}`,
+      Accept: "application/vnd.github.v3+json",
+      "Content-Type": "application/json",
+    },
+    body: body ? JSON.stringify(body) : undefined,
+    cache: "no-store"
+  });
+  return res.json();
+}
 
 export async function getContentList(type: string) {
   try {
     const conf = CONFIG[type];
-    if (!conf) throw new Error("Tipo non valido");
+    const data = await fetchGitHub(conf.dir);
+    if (!Array.isArray(data)) return [];
 
-    const dirPath = path.join(BASE_CONTENT_DIR, conf.dir);
-    if (!fs.existsSync(dirPath)) return [];
-
-    const files = fs.readdirSync(dirPath).filter(f => f.endsWith(".md"));
-    return files.map(file => {
-      const filePath = path.join(dirPath, file);
-      const fileContent = fs.readFileSync(filePath, "utf8");
-      const { data, content } = matter(fileContent);
+    const list = await Promise.all(data.map(async (file: any) => {
+      const fileData = await fetchGitHub(file.path);
+      const content = Buffer.from(fileData.content, "base64").toString("utf8");
+      const { data: metadata, content: body } = matter(content);
       return {
-        slug: file.replace(".md", ""),
-        content,
-        ...data
+        slug: file.name.replace(".md", ""),
+        content: body,
+        ...metadata,
+        sha: fileData.sha
       };
-    });
-  } catch (error) {
-    console.error("Error in getContentList:", error);
+    }));
+    return list;
+  } catch (err) {
+    console.error("Error fetching content list from GitHub:", err);
     return [];
   }
 }
@@ -56,64 +55,63 @@ export async function getContentList(type: string) {
 export async function saveContent(type: string, slug: string, content: string, metadata: any) {
   try {
     const conf = CONFIG[type];
-    if (!conf) throw new Error("Invalid content type");
+    const filePath = `${conf.dir}/${slug}.md`;
     
-    const dirPath = path.join(BASE_CONTENT_DIR, conf.dir);
-    if (!fs.existsSync(dirPath)) {
-      fs.mkdirSync(dirPath, { recursive: true });
-    }
-    
-    const filePath = path.join(dirPath, `${slug}.md`);
+    const existingFile = await fetchGitHub(filePath);
+    const sha = existingFile.sha;
+
     const fileContent = matter.stringify(content, metadata);
-    fs.writeFileSync(filePath, fileContent, "utf8");
+    const base64Content = Buffer.from(fileContent).toString("base64");
+
+    await fetchGitHub(filePath, "PUT", {
+      message: `cms: update ${type} ${slug}`,
+      content: base64Content,
+      sha,
+      branch: BRANCH
+    });
 
     await syncRegistry(type);
+    
     return { success: true };
-  } catch (error: any) {
-    console.error("Error in saveContent:", error);
-    throw new Error(error.message || "Errore durante il salvataggio");
+  } catch (err: any) {
+    console.error("Error saving content to GitHub:", err);
+    throw new Error(err.message || "Failed to save to GitHub");
   }
 }
 
 async function syncRegistry(type: string) {
   const conf = CONFIG[type];
   const articles = await getContentList(type);
-  const registryPath = path.join(process.cwd(), conf.registry);
+  const registryFile = await fetchGitHub(conf.registry);
+  const registryContent = Buffer.from(registryFile.content, "base64").toString("utf8");
 
-  if (!fs.existsSync(registryPath)) {
-    console.warn(`Registry path not found: ${registryPath}`);
-    return;
-  }
+  let updatedContent = "";
 
   if (conf.isJson) {
     const jsonData = articles.map((a: any) => {
-      const { content, ...rest } = a;
-      return {
-        ...rest,
-        desc: a.desc || a.excerpt || ""
-      };
+      const { content, sha, ...rest } = a;
+      return { ...rest, desc: a.desc || a.excerpt || "" };
     });
-    fs.writeFileSync(registryPath, JSON.stringify(jsonData, null, 2), "utf8");
+    updatedContent = JSON.stringify(jsonData, null, 2);
   } else {
-    let registryContent = fs.readFileSync(registryPath, "utf8");
-    const startMarker = conf.marker;
-    
-    const startIndex = registryContent.indexOf(startMarker);
-    if (startIndex === -1) {
-      console.warn(`Start marker "${startMarker}" not found in ${registryPath}`);
-      return;
-    }
-
+    const startIndex = registryContent.indexOf(conf.marker);
     const endIndex = registryContent.indexOf("];", startIndex);
-
-    if (endIndex !== -1) {
+    if (startIndex !== -1 && endIndex !== -1) {
       const dataItems = articles.map((a: any) => {
-          const { content, ...item } = a;
+          const { content, sha, ...item } = a;
           return `  ${JSON.stringify(item)}`;
       });
-      const newRegistryBlock = `${startMarker}\n${dataItems.join(",\n")}\n`;
-      const updatedContent = registryContent.substring(0, startIndex) + newRegistryBlock + registryContent.substring(endIndex);
-      fs.writeFileSync(registryPath, updatedContent, "utf8");
+      const newRegistryBlock = `${conf.marker}\n${dataItems.join(",\n")}\n`;
+      updatedContent = registryContent.substring(0, startIndex) + newRegistryBlock + registryContent.substring(endIndex);
     }
+  }
+
+  if (updatedContent && updatedContent !== registryContent) {
+    await fetchGitHub(conf.registry, "PUT", {
+      message: `cms: sync registry for ${type}`,
+      content: Buffer.from(updatedContent).toString("base64"),
+      sha: registryFile.sha,
+      branch: BRANCH
+    });
   }
 }
