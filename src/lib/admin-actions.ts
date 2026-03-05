@@ -15,7 +15,7 @@ const CONFIG: any = {
 
 async function fetchGitHub(path: string, method = "GET", body?: any) {
   if (!GITHUB_TOKEN) {
-    throw new Error("GITHUB_TOKEN non configurato nelle variabili d'ambiente");
+    return { error: "GITHUB_TOKEN non configurato" };
   }
 
   const url = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${path}`;
@@ -30,24 +30,26 @@ async function fetchGitHub(path: string, method = "GET", body?: any) {
     cache: "no-store"
   });
 
+  const data = await res.json();
   if (!res.ok) {
-    const errData = await res.json();
-    throw new Error(`GitHub API Error (${res.status}): ${errData.message || res.statusText}`);
+    return { error: `GitHub API ${res.status}: ${data.message || res.statusText}`, status: res.status };
   }
-
-  return res.json();
+  return data;
 }
 
 export async function getContentList(type: string) {
   try {
     const conf = CONFIG[type];
     const data = await fetchGitHub(conf.dir);
+    if (data.error) throw new Error(data.error);
     if (!Array.isArray(data)) return [];
 
     const list = await Promise.all(data.map(async (file: any) => {
       try {
         const fileData = await fetchGitHub(file.path);
-        const content = Buffer.from(fileData.content, "base64").toString("utf8");
+        if (fileData.error) return null;
+        const cleanBase64 = fileData.content.replace(/\n/g, "");
+        const content = Buffer.from(cleanBase64, "base64").toString("utf8");
         const { data: metadata, content: body } = matter(content);
         return {
           slug: file.name.replace(".md", ""),
@@ -56,14 +58,13 @@ export async function getContentList(type: string) {
           sha: fileData.sha
         };
       } catch (e) {
-        console.error(`Error fetching file ${file.path}:`, e);
         return null;
       }
     }));
     return list.filter(item => item !== null);
   } catch (err: any) {
     console.error("Error in getContentList:", err);
-    throw new Error(err.message);
+    return [];
   }
 }
 
@@ -73,60 +74,71 @@ export async function saveContent(type: string, slug: string, content: string, m
     const filePath = `${conf.dir}/${slug}.md`;
     
     const existingFile = await fetchGitHub(filePath);
-    const sha = existingFile.sha;
+    if (existingFile.error) return { success: false, error: `Errore recupero file: ${existingFile.error}` };
 
     const fileContent = matter.stringify(content, metadata);
     const base64Content = Buffer.from(fileContent).toString("base64");
 
-    await fetchGitHub(filePath, "PUT", {
+    const updateRes = await fetchGitHub(filePath, "PUT", {
       message: `cms: update ${type} ${slug}`,
       content: base64Content,
-      sha,
+      sha: existingFile.sha,
       branch: BRANCH
     });
 
-    await syncRegistry(type);
+    if (updateRes.error) return { success: false, error: `Errore salvataggio GitHub: ${updateRes.error}` };
+
+    const syncRes = await syncRegistry(type);
+    if (syncRes && (syncRes as any).error) return { success: false, error: `Errore sincronizzazione registro: ${(syncRes as any).error}` };
     
     return { success: true };
   } catch (err: any) {
-    console.error("Error saving content to GitHub:", err);
-    throw new Error(err.message);
+    return { success: false, error: err.message || "Eccezione imprevista durante il salvataggio" };
   }
 }
 
 async function syncRegistry(type: string) {
-  const conf = CONFIG[type];
-  const articles = await getContentList(type);
-  const registryFile = await fetchGitHub(conf.registry);
-  const registryContent = Buffer.from(registryFile.content, "base64").toString("utf8");
+  try {
+    const conf = CONFIG[type];
+    const articles = await getContentList(type);
+    const registryFile = await fetchGitHub(conf.registry);
+    if (registryFile.error) return { error: registryFile.error };
 
-  let updatedContent = "";
+    const cleanBase64 = registryFile.content.replace(/\n/g, "");
+    const registryContent = Buffer.from(cleanBase64, "base64").toString("utf8");
 
-  if (conf.isJson) {
-    const jsonData = articles.map((a: any) => {
-      const { content, sha, ...rest } = a;
-      return { ...rest, desc: a.desc || a.excerpt || "" };
-    });
-    updatedContent = JSON.stringify(jsonData, null, 2);
-  } else {
-    const startIndex = registryContent.indexOf(conf.marker);
-    const endIndex = registryContent.indexOf("];", startIndex);
-    if (startIndex !== -1 && endIndex !== -1) {
-      const dataItems = articles.map((a: any) => {
-          const { content, sha, ...item } = a;
-          return `  ${JSON.stringify(item)}`;
+    let updatedContent = "";
+
+    if (conf.isJson) {
+      const jsonData = articles.map((a: any) => {
+        const { content, sha, ...rest } = a;
+        return { ...rest, desc: a.desc || a.excerpt || "" };
       });
-      const newRegistryBlock = `${conf.marker}\n${dataItems.join(",\n")}\n`;
-      updatedContent = registryContent.substring(0, startIndex) + newRegistryBlock + registryContent.substring(endIndex);
+      updatedContent = JSON.stringify(jsonData, null, 2);
+    } else {
+      const startIndex = registryContent.indexOf(conf.marker);
+      const endIndex = registryContent.indexOf("];", startIndex);
+      if (startIndex !== -1 && endIndex !== -1) {
+        const dataItems = articles.map((a: any) => {
+            const { content, sha, ...item } = a;
+            return `  ${JSON.stringify(item)}`;
+        });
+        const newRegistryBlock = `${conf.marker}\n${dataItems.join(",\n")}\n`;
+        updatedContent = registryContent.substring(0, startIndex) + newRegistryBlock + registryContent.substring(endIndex);
+      }
     }
-  }
 
-  if (updatedContent && updatedContent !== registryContent) {
-    await fetchGitHub(conf.registry, "PUT", {
-      message: `cms: sync registry for ${type}`,
-      content: Buffer.from(updatedContent).toString("base64"),
-      sha: registryFile.sha,
-      branch: BRANCH
-    });
+    if (updatedContent && updatedContent !== registryContent) {
+      const pushRes = await fetchGitHub(conf.registry, "PUT", {
+        message: `cms: sync registry for ${type}`,
+        content: Buffer.from(updatedContent).toString("base64"),
+        sha: registryFile.sha,
+        branch: BRANCH
+      });
+      if (pushRes.error) return { error: pushRes.error };
+    }
+    return { success: true };
+  } catch (e: any) {
+    return { error: e.message };
   }
 }

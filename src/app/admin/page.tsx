@@ -40,8 +40,7 @@ export default function AdminDashboard() {
       setActiveType(type);
       setSelectedItem(null);
     } catch (err: any) {
-      console.error("Load error:", err);
-      setError(err.message || "Errore durante il caricamento dei dati da GitHub.");
+      setError(err.message || "Errore caricamento");
     } finally {
       setLoading(false);
     }
@@ -57,16 +56,18 @@ export default function AdminDashboard() {
   const handleSave = async () => {
     if (!selectedItem) return;
     setLoading(true);
+    setError(null);
     try {
       const result = await saveContent(activeType, selectedItem.slug, editContent, editMetadata);
       if (result.success) {
-        alert("Salvato con Successo!");
+        alert("Salvato con Successo su GitHub!");
         await loadItems(activeType);
         setSelectedItem(null);
+      } else {
+        setError(result.error || "Errore sconosciuto durante il salvataggio");
       }
     } catch (e: any) {
-      console.error("Save error details:", e);
-      alert("Errore durante il salvataggio: " + (e.message || "Unknown error"));
+      setError("Eccezione: " + (e.message || "Unknown error"));
     } finally {
       setLoading(false);
     }
@@ -109,7 +110,7 @@ export default function AdminDashboard() {
         </div>
 
         {error && (
-          <div className="mb-8 p-4 bg-red-950/20 border border-red-900 text-red-500 rounded-xl text-xs font-mono">
+          <div className="mb-8 p-4 bg-red-950/20 border border-red-900 text-red-500 rounded-xl text-xs font-mono whitespace-pre-wrap">
             <strong>ERRORE:</strong> {error}
           </div>
         )}
@@ -117,7 +118,7 @@ export default function AdminDashboard() {
         <div className="flex gap-10">
           <div className="w-1/3 border-r border-white/5 pr-10 h-[calc(100vh-350px)] overflow-y-auto">
             {loading && items.length === 0 ? (
-              <div className="text-gray-600 uppercase tracking-widest text-[10px] animate-pulse">Caricamento da GitHub...</div>
+              <div className="text-gray-600 uppercase tracking-widest text-[10px] animate-pulse">Sincronizzazione GitHub...</div>
             ) : (
               <div className="space-y-4">
                 {items.map(a => (
@@ -171,12 +172,12 @@ export default function AdminDashboard() {
                   disabled={loading}
                   className={`px-10 py-4 bg-red-900 text-white font-bold rounded-xl uppercase tracking-widest shadow-lg hover:bg-white hover:text-black transition-all ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
                 >
-                  {loading ? "Sincronizzazione GitHub..." : "Salva e Pusha su GitHub"}
+                  {loading ? "Processo Git in corso..." : "Salva e Pusha su GitHub"}
                 </button>
               </div>
             ) : (
               <div className="h-full flex items-center justify-center text-gray-700 uppercase tracking-widest text-xs font-black">
-                {loading ? "In attesa di GitHub..." : "Seleziona un elemento per iniziare l'editing"}
+                {loading ? "Attesa GitHub API..." : "Seleziona un elemento per iniziare l'editing"}
               </div>
             )}
           </div>
