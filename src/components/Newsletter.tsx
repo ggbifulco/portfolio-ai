@@ -6,18 +6,14 @@ import Link from "next/link";
 import { useLanguage } from "@/context/LanguageContext";
 
 export const newsIssues = [
-  { slug: "ttt-layers-deep-dive", title: "TTT-Layers: La fine del Cache KV e l'era della Memoria Infinita", date: "05 Mar 2026", excerpt: "Il Modello come Stato. Come le Test-Time Training Layers stanno superando i limiti di memoria dei Transformer.", category: "Architecture", image: "https://images.unsplash.com/photo-1675557009875-436f297b3a5e?auto=format&fit=crop&q=80&w=800" },
-  { slug: "liquid-neural-networks", title: "Liquid Neural Networks: Oltre i Transformer", date: "05 Mar 2026", excerpt: "Dinamicità biologica e tempo continuo. Come le LNN stanno sfidando il dominio dell'architettura Transformer.", category: "AI Research", image: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&q=80&w=800" },
-  { slug: "vla-robotics", title: "The Convergence: VLA Models and Physical AI", date: "05 Mar 2026", excerpt: "Dagli LLM ai corpi fisici. Come i modelli Vision-Language-Action stanno rivoluzionando la robotica umanoide.", category: "Robotics", image: "https://images.unsplash.com/photo-1546776230-bb86256870ce?auto=format&fit=crop&q=80&w=800" },
-  { slug: "sovereign-llm", title: "The Sovereign LLM: L'Alba dell'Indipendenza Open-Source", date: "05 Mar 2026", excerpt: "Il divario tra Closed e Open Source si chiude. Analisi tecnica di Llama 4 e DeepSeek-V4.", category: "Open Source", image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=800" },
-  { slug: "deepseek-v4-deep-dive", title: "DeepSeek-V4: Anatomia di un Gigante MoE", date: "05 Mar 2026", excerpt: "Sparsity 2.0, Engram e Multi-Token Prediction. Analisi tecnica dell'architettura da 1 Trilione di parametri.", category: "Architecture", image: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&q=80&w=800" },
-  { slug: "grok-4-20-parallel-agents", title: "Grok 4.20: Il Trionfo del Parallelismo Multi-Agente", date: "05 Mar 2026", excerpt: "xAI riscrive le regole con 4 agenti paralleli interni. Efficienza e ragionamento estremi.", category: "LLM Architecture", image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=800" },
-  { slug: "rag-renaissance", title: "The RAG Renaissance", date: "15 Feb 2026", excerpt: "Perché il cosine similarity non basta più? Intro a Hybrid Search.", category: "Architecture", image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=800" },
-  { slug: "agentic-workflows", title: "Agentic Workflows", date: "01 Feb 2026", excerpt: "La differenza tra Chat e Agente. Architetture ReAct.", category: "Agents", image: "https://images.unsplash.com/photo-1664575602276-acd073f104c1?auto=format&fit=crop&q=80&w=800" },
-  { slug: "local-llm-optimization", title: "Local LLM", date: "18 Gen 2026", excerpt: "Analisi tecnica della quantizzazione 4-bit e 8-bit.", category: "Optimization", image: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&q=80&w=800" },
-  { slug: "multimodality-vision", title: "Vision Encoders", date: "05 Gen 2026", excerpt: "How CLIP and SigLIP are changing vision pipelines.", category: "Vision", image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=800" }, 
-  { slug: "ai-governance", title: "AI Governance", date: "20 Dic 2025", excerpt: "The EU AI Act explained for software engineers.", category: "Ethics", image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=800" },
-  { slug: "efficient-finetuning", title: "Efficient Fine-Tuning", date: "10 Dic 2025", excerpt: "Training models with limited GPU memory using PEFT.", category: "Training", image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc51?auto=format&fit=crop&q=80&w=800" }
+  {"slug":"articolo-test","title":"Questo è  un articolo di prova","date":"05 Mar 2026","excerpt":"sottotitolo home articolo di prova","category":"AI Research","image":"https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&q=80&w=800"},
+  {"slug":"deepseek-v4-deep-dive"},
+  {"slug":"grok-4-20-parallel-agents"},
+  {"slug":"liquid-neural-networks"},
+  {"slug":"rag-renaissance"},
+  {"slug":"sovereign-llm"},
+  {"slug":"ttt-layers-deep-dive"},
+  {"slug":"vla-robotics"}
 ];
 
 export function NewsCard({ issue, idx }: { issue: any, idx: number }) {
