@@ -3,58 +3,93 @@ import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
 
-const CONTENT_DIR = path.join(process.cwd(), "src", "content", "newsletter");
-const REGISTRY_FILE = path.join(process.cwd(), "src", "components", "Newsletter.tsx");
+const BASE_CONTENT_DIR = path.join(process.cwd(), "src", "content");
 
-export async function getNewsletterList() {
-  const files = fs.readdirSync(CONTENT_DIR);
+const CONFIG: any = {
+  newsletter: {
+    dir: "newsletter",
+    registry: "src/components/Newsletter.tsx",
+    marker: "export const newsIssues = ["
+  },
+  projects: {
+    dir: "projects",
+    registry: "src/data/projects.json",
+    isJson: true
+  },
+  courses: {
+    dir: "academy/courses",
+    registry: "src/components/Academy.tsx",
+    marker: "export const coursesData = ["
+  },
+  pills: {
+    dir: "academy/pills",
+    registry: "src/components/Academy.tsx",
+    marker: "export const pillsData = ["
+  }
+};
+
+export async function getContentList(type: string) {
+  const conf = CONFIG[type];
+  if (!conf) throw new Error("Tipo non valido");
+  
+  const dirPath = path.join(BASE_CONTENT_DIR, conf.dir);
+  if (!fs.existsSync(dirPath)) return [];
+
+  const files = fs.readdirSync(dirPath).filter(f => f.endsWith(".md"));
   return files.map(file => {
-    const filePath = path.join(CONTENT_DIR, file);
+    const filePath = path.join(dirPath, file);
     const fileContent = fs.readFileSync(filePath, "utf8");
     const { data, content } = matter(fileContent);
     return {
       slug: file.replace(".md", ""),
       content,
-      title: data.title,
-      date: data.date,
-      excerpt: data.excerpt,
-      category: data.category,
-      image: data.image,
       ...data
     };
   });
 }
 
-export async function saveNewsletterArticle(slug: string, content: string, metadata: any) {
-  const filePath = path.join(CONTENT_DIR, `${slug}.md`);
+export async function saveContent(type: string, slug: string, content: string, metadata: any) {
+  const conf = CONFIG[type];
+  const dirPath = path.join(BASE_CONTENT_DIR, conf.dir);
+  const filePath = path.join(dirPath, `${slug}.md`);
+  
   const fileContent = matter.stringify(content, metadata);
   fs.writeFileSync(filePath, fileContent, "utf8");
   
-  await syncNewsletterRegistry();
+  await syncRegistry(type);
   return { success: true };
 }
 
-async function syncNewsletterRegistry() {
-  const articles = await getNewsletterList();
-  const newsIssues = articles.map((a: any) => ({
-    slug: a.slug,
-    title: a.title || "Senza Titolo",
-    date: a.date || new Date().toLocaleDateString(),
-    excerpt: a.excerpt || "",
-    category: a.category || "General",
-    image: a.image || "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&q=80&w=800"
-  }));
+async function syncRegistry(type: string) {
+  const conf = CONFIG[type];
+  const articles = await getContentList(type);
+  const registryPath = path.join(process.cwd(), conf.registry);
 
-  let registryContent = fs.readFileSync(REGISTRY_FILE, "utf8");
-  const startMarker = "export const newsIssues = [";
-  const endMarker = "];";
-  
-  const startIndex = registryContent.indexOf(startMarker);
-  const endIndex = registryContent.indexOf(endMarker, startIndex);
+  if (conf.isJson) {
+    const jsonData = articles.map((a: any) => {
+      const { content, ...rest } = a;
+      return {
+        ...rest,
+        desc: a.desc || a.excerpt || ""
+      };
+    });
+    fs.writeFileSync(registryPath, JSON.stringify(jsonData, null, 2), "utf8");
+  } else {
+    let registryContent = fs.readFileSync(registryPath, "utf8");
+    const startMarker = conf.marker;
+    const endMarker = "];";
+    
+    const startIndex = registryContent.indexOf(startMarker);
+    const endIndex = registryContent.indexOf(endMarker, startIndex);
 
-  if (startIndex !== -1 && endIndex !== -1) {
-    const newRegistry = `${startMarker}\n${newsIssues.map(n => `  ${JSON.stringify(n)}`).join(",\n")}\n`;
-    const updatedContent = registryContent.substring(0, startIndex) + newRegistry + registryContent.substring(endIndex);
-    fs.writeFileSync(REGISTRY_FILE, updatedContent, "utf8");
+    if (startIndex !== -1 && endIndex !== -1) {
+      const dataItems = articles.map((a: any) => {
+          const { content, ...item } = a;
+          return `  ${JSON.stringify(item)}`;
+      });
+      const newRegistry = `${startMarker}\n${dataItems.join(",\n")}\n`;
+      const updatedContent = registryContent.substring(0, startIndex) + newRegistry + registryContent.substring(endIndex);
+      fs.writeFileSync(registryPath, updatedContent, "utf8");
+    }
   }
 }
