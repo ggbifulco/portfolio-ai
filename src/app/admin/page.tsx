@@ -18,6 +18,7 @@ export default function AdminDashboard() {
   const [selectedItem, setSelectedItem] = useState<any>(null);
   const [editContent, setEditContent] = useState("");
   const [editMetadata, setEditMetadata] = useState<any>({});
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,10 +31,14 @@ export default function AdminDashboard() {
   };
 
   const loadItems = async (type: string) => {
-    const list = await getContentList(type);
-    setItems(list);
-    setActiveType(type);
-    setSelectedItem(null);
+    try {
+      const list = await getContentList(type);
+      setItems(list);
+      setActiveType(type);
+      setSelectedItem(null);
+    } catch (err) {
+      console.error("Load error:", err);
+    }
   };
 
   const handleEdit = (item: any) => {
@@ -45,13 +50,19 @@ export default function AdminDashboard() {
 
   const handleSave = async () => {
     if (!selectedItem) return;
+    setLoading(true);
     try {
-      await saveContent(activeType, selectedItem.slug, editContent, editMetadata);
-      alert("Salvato con Successo!");
-      loadItems(activeType);
-      setSelectedItem(null);
-    } catch (e) {
-      alert("Errore durante il salvataggio");
+      const result = await saveContent(activeType, selectedItem.slug, editContent, editMetadata);
+      if (result.success) {
+        alert("Salvato con Successo!");
+        await loadItems(activeType);
+        setSelectedItem(null);
+      }
+    } catch (e: any) {
+      console.error("Save error details:", e);
+      alert("Errore durante il salvataggio: " + (e.message || "Unknown error"));
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -106,12 +117,6 @@ export default function AdminDashboard() {
                   <p className="text-xs text-gray-500">{a.slug}</p>
                 </div>
               ))}
-              <button 
-                onClick={() => alert("Funzionalità Nuova Voce in arrivo...")}
-                className="w-full p-4 border border-dashed border-white/10 rounded-xl text-gray-500 hover:text-white transition-all text-xs font-bold uppercase tracking-widest"
-              >
-                + Aggiungi Nuovo
-              </button>
             </div>
           </div>
 
@@ -121,12 +126,12 @@ export default function AdminDashboard() {
                 <h2 className="text-xl font-bold uppercase tracking-widest mb-4">Editing: {selectedItem.slug}</h2>
                 
                 <div className="grid grid-cols-2 gap-4">
-                  {Object.keys(editMetadata).filter(k => k !== "slug").map(key => (
+                  {Object.keys(editMetadata).filter(k => !["slug", "content"].includes(k)).map(key => (
                     <div key={key}>
                       <label className="text-[8px] uppercase tracking-widest text-gray-500 font-black mb-1 block">{key}</label>
                       <input 
                         className="w-full bg-zinc-900 p-3 rounded-lg border border-white/10 text-white text-xs" 
-                        value={editMetadata[key]} 
+                        value={editMetadata[key] || ""} 
                         onChange={e => setEditMetadata({...editMetadata, [key]: e.target.value})} 
                       />
                     </div>
@@ -144,9 +149,10 @@ export default function AdminDashboard() {
 
                 <button 
                   onClick={handleSave}
-                  className="px-10 py-4 bg-red-900 text-white font-bold rounded-xl uppercase tracking-widest shadow-lg hover:bg-white hover:text-black transition-all"
+                  disabled={loading}
+                  className={`px-10 py-4 bg-red-900 text-white font-bold rounded-xl uppercase tracking-widest shadow-lg hover:bg-white hover:text-black transition-all ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
                 >
-                  Salva Modifiche
+                  {loading ? "Salvataggio..." : "Salva Modifiche"}
                 </button>
               </div>
             ) : (
