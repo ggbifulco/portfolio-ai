@@ -1,5 +1,0 @@
-[
-  { "slug": "liquid-neural-networks", "title": "Liquid Neural Networks: Oltre i Transformer", "date": "05 Mar 2026", "excerpt": "Dinamicità biologica e tempo continuo. Come le LNN stanno sfidando il dominio dell'architettura Transformer.", "category": "AI Research", "image": "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&q=80&w=800" },
-  { "slug": "vla-robotics", "title": "The Convergence: VLA Models and Physical AI", "date": "05 Mar 2026", "excerpt": "Dagli LLM ai corpi fisici. Come i modelli Vision-Language-Action stanno rivoluzionando la robotica umanoide.", "category": "Robotics", "image": "https://images.unsplash.com/photo-1546776230-bb86256870ce?auto=format&fit=crop&q=80&w=800" },
-  { "slug": "sovereign-llm", "title": "The Sovereign LLM: L'Alba dell'Indipendenza Open-Source", "date": "05 Mar 2026", "excerpt": "Il divario tra Closed e Open Source si chiude. Analisi tecnica di Llama 4 e DeepSeek-V4.", "category": "Open Source", "image": "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=800" }
-]

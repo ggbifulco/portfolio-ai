@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import React, { useEffect, useState } from "react";
 import Navbar from "@/components/Navbar";
 import { motion } from "framer-motion";
@@ -8,20 +8,22 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import ReactMarkdown from "react-markdown";
 import Script from "next/script";
-import newsIssues from "@/data/newsletter.json";
+import { newsIssues } from "@/components/Newsletter";
 
 export default function NewsDetail() {
   const { t } = useLanguage();
   const params = useParams();
   const [content, setContent] = useState("");
   
-  const issue = newsIssues.find(n => n.slug === params.slug) || newsIssues[0];
+  const issue = (newsIssues.find(n => n.slug === params.slug) || newsIssues[0]) as any;
 
   useEffect(() => {
-    fetch(`/api/content?type=newsletter&slug=${params.slug}`)
-      .then(res => res.json())
-      .then(data => setContent(data.content))
-      .catch(() => setContent("Articolo in fase di scrittura..."));
+    if (params.slug) {
+      fetch(`/api/content?type=newsletter&slug=${params.slug}`)
+        .then(res => res.json())
+        .then(data => setContent(data.content))
+        .catch(() => setContent("Articolo in fase di scrittura..."));
+    }
   }, [params.slug]);
 
   // Re-trigger per Prism e KaTeX quando il contenuto cambia
@@ -75,7 +77,7 @@ export default function NewsDetail() {
         <code className="bg-red-950/30 px-2 py-0.5 rounded text-red-400 font-mono text-sm border border-red-900/20" {...props}>{children}</code>
       ) : (
         <div className="relative my-10 group">
-          <div className="absolute -inset-2 bg-gradient-to-r from-red-900/20 to-transparent rounded-xl blur opacity-10"></div>
+          <div className="absolute -inset-2 bg-gradient-to-r from-red-900/20 to-transparent rounded-xl blur opacity-10"></div>       
           <pre className={`relative bg-[#050505] border border-white/10 p-6 rounded-xl overflow-x-auto shadow-2xl font-mono text-sm leading-relaxed language-${lang}`}>
             <code className={`language-${lang}`} {...props}>{children}</code>
           </pre>
@@ -100,18 +102,18 @@ export default function NewsDetail() {
       <Script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" strategy="afterInteractive" />
       <Script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" strategy="afterInteractive" />
       <Script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js" strategy="afterInteractive" />
-      
-      <section className="pt-28 sm:pt-36 lg:pt-48 pb-10 sm:pb-16 lg:pb-20 px-4 sm:px-6 lg:px-10 border-b border-white/5 bg-[radial-gradient(circle_at_50%_0%,rgba(153,0,36,0.1),transparent_50%)]">
+
+      <section className="pt-28 sm:pt-36 lg:pt-48 pb-10 sm:pb-16 lg:pb-20 px-4 sm:px-6 lg:px-10 border-b border-white/5 bg-[radial-gradient(circle_at_50%_0%,rgba(153,0,36,0.15),transparent_50%)]">
         <div className="max-w-4xl mx-auto">
           <Link href="/newsletter" className="inline-flex items-center gap-2 text-red-700 font-bold mb-8 sm:mb-12 hover:gap-4 transition-all uppercase tracking-widest text-xs">
             <ArrowLeft size={16} /> {t.newsletter.archive}
           </Link>
           <div className="space-y-4 sm:space-y-6">
             <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-gray-500 text-[10px] font-bold uppercase tracking-widest">
-              <span className="px-3 py-1 bg-red-950/30 border border-red-900/30 rounded-md text-red-500">{issue.category}</span>     
-              <span className="flex items-center gap-1"><Calendar size={14} /> {issue.date}</span>
+              <span className="px-3 py-1 bg-red-950/30 border border-red-900/30 rounded-md text-red-500">{issue?.category || "AI"}</span>     
+              <span className="flex items-center gap-1"><Calendar size={14} /> {issue?.date}</span>
             </div>
-            <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black uppercase tracking-tighter leading-none">{issue.title}</h1>
+            <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black uppercase tracking-tighter leading-none">{issue?.title}</h1>
             <div className="flex items-center gap-3 pt-4 border-t border-white/5">
               <User size={18} className="text-red-700" />
               <div>
