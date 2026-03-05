@@ -2,6 +2,13 @@
 import React, { useState, useEffect } from "react";
 import { getContentList, saveContent, deleteContent, getDefaults } from "@/lib/admin-actions";
 import Navbar from "@/components/Navbar";
+import dynamic from "next/dynamic";
+
+// Caricamento dinamico dell'editor per evitare errori SSR (Server-Side Rendering)
+const MDEditor = dynamic(
+  () => import("@uiw/react-md-editor"),
+  { ssr: false }
+);
 
 const CONTENT_TYPES = [
   { id: "newsletter", label: "Newsletter" },
@@ -96,7 +103,7 @@ export default function AdminDashboard() {
 
   const handleDelete = async () => {
     if (!selectedItem || selectedItem.isNew) return;
-    if (!confirm(`Sei sicuro di voler eliminare permanentemente '${selectedItem.slug}'? Questa operazione farà un commit di cancellazione su GitHub.`)) return;
+    if (!confirm(`Sei sicuro di voler eliminare permanentemente '${selectedItem.slug}'?`)) return;
     
     setLoading(true);
     try {
@@ -134,7 +141,7 @@ export default function AdminDashboard() {
   }
 
   return (
-    <main className="bg-black min-h-screen text-white pt-32 px-10 pb-20">
+    <main className="bg-black min-h-screen text-white pt-32 px-10 pb-20" data-color-mode="dark">
       <Navbar />
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-10 border-b border-white/5 pb-6">
@@ -193,7 +200,6 @@ export default function AdminDashboard() {
                 <div className="flex justify-between items-center mb-4">
                   <h2 className="text-xl font-bold uppercase tracking-widest">Editing: {selectedItem.slug}</h2>
                   <div className="flex gap-4 items-center">
-                    {selectedItem.sha && <span className="text-[10px] font-mono text-gray-600 uppercase">SHA: {selectedItem.sha.substring(0,7)}</span>}
                     {!selectedItem.isNew && (
                       <button 
                         onClick={handleDelete}
@@ -212,13 +218,13 @@ export default function AdminDashboard() {
                       <label className="text-[8px] uppercase tracking-widest text-red-700 font-black mb-1 block">{key}</label>
                       {key === "videos" ? (
                         <textarea 
-                          className="w-full h-32 bg-black/50 p-3 rounded-lg border border-white/10 text-white text-xs font-mono" 
+                          className="w-full h-24 bg-black/50 p-3 rounded-lg border border-white/10 text-white text-xs font-mono" 
                           value={typeof editMetadata[key] === 'object' ? JSON.stringify(editMetadata[key], null, 2) : editMetadata[key]} 
                           onChange={e => setEditMetadata({...editMetadata, [key]: e.target.value})} 
                         />
                       ) : key === "description" || key === "desc" || key === "excerpt" ? (
                         <textarea 
-                          className="w-full h-20 bg-black/50 p-3 rounded-lg border border-white/10 text-white text-xs" 
+                          className="w-full h-16 bg-black/50 p-3 rounded-lg border border-white/10 text-white text-xs" 
                           value={editMetadata[key]} 
                           onChange={e => setEditMetadata({...editMetadata, [key]: e.target.value})} 
                         />
@@ -233,12 +239,14 @@ export default function AdminDashboard() {
                   ))}
                 </div>
 
-                <div>
-                  <label className="text-[8px] uppercase tracking-widest text-red-700 font-black mb-1 block">Contenuto Markdown</label>
-                  <textarea 
-                    className="w-full h-96 bg-zinc-900 p-6 rounded-2xl border border-white/10 font-mono text-sm text-white focus:border-red-900 outline-none transition-all"
+                <div className="rounded-2xl border border-white/10 overflow-hidden shadow-2xl">
+                  <label className="text-[8px] uppercase tracking-widest text-red-700 font-black p-4 bg-zinc-900 block border-b border-white/5">Contenuto (Editor Visuale)</label>
+                  <MDEditor
                     value={editContent}
-                    onChange={e => setEditContent(e.target.value)}
+                    onChange={(val) => setEditContent(val || "")}
+                    preview="live"
+                    height={500}
+                    style={{ backgroundColor: "#09090b" }}
                   />
                 </div>
 
@@ -247,12 +255,12 @@ export default function AdminDashboard() {
                   disabled={loading}
                   className={`px-10 py-4 bg-red-900 text-white font-bold rounded-xl uppercase tracking-widest shadow-lg hover:bg-white hover:text-black transition-all ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
                 >
-                  {loading ? "Processo Git..." : "Salva e Pusha su GitHub"}
+                  {loading ? "Sincronizzazione GitHub..." : "Salva e Pubblica Modifiche"}
                 </button>
               </div>
             ) : (
               <div className="h-full flex items-center justify-center text-gray-700 uppercase tracking-widest text-xs font-black italic">
-                {loading ? "Attesa GitHub API..." : "Seleziona un elemento o clicca su 'Aggiungi Nuovo'"}
+                Seleziona un elemento o clicca su "+ Aggiungi Nuovo"
               </div>
             )}
           </div>
