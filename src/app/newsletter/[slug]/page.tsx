@@ -70,7 +70,7 @@ export default function NewsDetail() {
 
   return (
     <main className="bg-black min-h-screen text-white pb-32 font-sans">
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" integrity="sha384-nAnmEnC99465+3+8c+X6pW9d3+69N9N9N9N9N9N9N9N9N9N9N9N9N9N9N9N9N9" crossorigin="anonymous" />
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" integrity="sha384-nAnmEnC99465+3+8c+X6pW9d3+69N9N9N9N9N9N9N9N9N9N9N9N9N9N9N9N9N9" crossOrigin="anonymous" />
       <Navbar />
       <section className="pt-28 sm:pt-36 lg:pt-48 pb-10 sm:pb-16 lg:pb-20 px-4 sm:px-6 lg:px-10 border-b border-white/5 bg-[radial-gradient(circle_at_50%_0%,rgba(153,0,36,0.1),transparent_50%)]">
         <div className="max-w-4xl mx-auto">
