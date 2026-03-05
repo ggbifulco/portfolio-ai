@@ -56,7 +56,16 @@ export default function NewsDetail() {
       <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-10">
         <div className="max-w-3xl mx-auto">
           <div className="markdown-content text-gray-300 leading-relaxed text-base sm:text-lg font-light">
-            <ReactMarkdown>{content}</ReactMarkdown>
+            <ReactMarkdown components={{
+              h1: ({node, ...props}) => <h1 className="text-3xl font-black uppercase tracking-tighter mb-8 mt-12 text-white" {...props} />,
+              h2: ({node, ...props}) => <h2 className="text-2xl font-black uppercase tracking-tight mb-6 mt-10 text-white border-l-4 border-red-700 pl-4" {...props} />,
+              h3: ({node, ...props}) => <h3 className="text-xl font-bold uppercase mb-4 mt-8 text-white" {...props} />,
+              p: ({node, ...props}) => <p className="mb-6 leading-relaxed text-gray-400" {...props} />,
+              ul: ({node, ...props}) => <ul className="list-disc list-inside mb-6 space-y-2 text-gray-400" {...props} />,
+              li: ({node, ...props}) => <li className="ml-4" {...props} />,
+              strong: ({node, ...props}) => <strong className="font-bold text-red-500/90" {...props} />,
+              code: ({node, ...props}) => <code className="bg-white/5 px-1.5 py-0.5 rounded text-red-400 font-mono text-sm" {...props} />,
+            }}>{content}</ReactMarkdown>
           </div>
         </div>
       </section>
