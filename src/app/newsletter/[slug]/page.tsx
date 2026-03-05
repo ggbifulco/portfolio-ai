@@ -57,6 +57,35 @@ export default function NewsDetail() {
         <div className="max-w-3xl mx-auto">
           <div className="markdown-content text-gray-300 leading-relaxed text-base sm:text-lg font-light">
             <ReactMarkdown components={{
+              h1: ({node, ...props}) => <h1 className="text-4xl font-black uppercase tracking-tighter mb-10 mt-16 text-white border-b-2 border-red-700 pb-4" {...props} />,
+              h2: ({node, ...props}) => <h2 className="text-2xl font-black uppercase tracking-tight mb-8 mt-12 text-white flex items-center gap-3"><span className="w-2 h-8 bg-red-700 block"></span>{props.children}</h2>,
+              h3: ({node, ...props}) => <h3 className="text-xl font-bold uppercase mb-6 mt-10 text-red-500" {...props} />,
+              p: ({node, ...props}) => <p className="mb-8 leading-relaxed text-gray-300 text-lg font-light text-justify" {...props} />,
+              ul: ({node, ...props}) => <ul className="list-disc list-outside mb-8 space-y-4 text-gray-300 ml-6" {...props} />,
+              li: ({node, ...props}) => <li className="pl-2" {...props} />,
+              strong: ({node, ...props}) => <strong className="font-bold text-white bg-red-900/20 px-1 rounded" {...props} />,
+              code: ({node, inline, ...props}) => inline ? 
+                <code className="bg-red-950/30 px-2 py-0.5 rounded text-red-400 font-mono text-sm border border-red-900/20" {...props} /> :
+                <div className="relative my-10 group">
+                  <div className="absolute -inset-2 bg-gradient-to-r from-red-900/20 to-transparent rounded-xl blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
+                  <pre className="relative bg-[#0a0a0a] border border-white/10 p-6 rounded-xl overflow-x-auto shadow-2xl font-mono text-sm leading-relaxed text-gray-300">
+                    <div className="flex gap-1.5 mb-4 border-b border-white/5 pb-4">
+                      <div className="w-3 h-3 rounded-full bg-red-900/40"></div>
+                      <div className="w-3 h-3 rounded-full bg-gray-800"></div>
+                      <div className="w-3 h-3 rounded-full bg-gray-800"></div>
+                    </div>
+                    <code {...props} />
+                  </pre>
+                </div>,
+              img: ({node, ...props}) => (
+                <figure className="my-12">
+                  <div className="rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
+                    <img className="w-full h-auto object-cover" {...props} />
+                  </div>
+                  {props.alt && <figcaption className="mt-4 text-center text-sm font-medium text-gray-500 italic uppercase tracking-widest">{props.alt}</figcaption>}
+                </figure>
+              ),
+              blockquote: ({node, ...props}) => <blockquote className="border-l-4 border-red-700 pl-8 my-10 italic text-xl text-gray-400 font-serif" {...props} />,
               h1: ({node, ...props}) => <h1 className="text-3xl font-black uppercase tracking-tighter mb-8 mt-12 text-white" {...props} />,
               h2: ({node, ...props}) => <h2 className="text-2xl font-black uppercase tracking-tight mb-6 mt-10 text-white border-l-4 border-red-700 pl-4" {...props} />,
               h3: ({node, ...props}) => <h3 className="text-xl font-bold uppercase mb-4 mt-8 text-white" {...props} />,
