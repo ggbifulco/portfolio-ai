@@ -1,6 +1,6 @@
 ﻿"use client";
 import React, { useState, useEffect } from "react";
-import { getContentList, saveContent, getDefaults } from "@/lib/admin-actions";
+import { getContentList, saveContent, deleteContent, getDefaults } from "@/lib/admin-actions";
 import Navbar from "@/components/Navbar";
 
 const CONTENT_TYPES = [
@@ -68,7 +68,6 @@ export default function AdminDashboard() {
     setLoading(true);
     setError(null);
     try {
-      // Validazione JSON per i video se presenti
       let finalMetadata = { ...editMetadata };
       if (typeof finalMetadata.videos === 'string') {
         try {
@@ -87,6 +86,27 @@ export default function AdminDashboard() {
         setSelectedItem(null);
       } else {
         setError(result.error || "Errore durante il salvataggio");
+      }
+    } catch (e: any) {
+      setError("Eccezione: " + (e.message || "Unknown error"));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!selectedItem || selectedItem.isNew) return;
+    if (!confirm(`Sei sicuro di voler eliminare permanentemente '${selectedItem.slug}'? Questa operazione farà un commit di cancellazione su GitHub.`)) return;
+    
+    setLoading(true);
+    try {
+      const result = await deleteContent(activeType, selectedItem.slug, selectedItem.sha);
+      if (result.success) {
+        alert("Eliminato con Successo!");
+        await loadItems(activeType);
+        setSelectedItem(null);
+      } else {
+        setError(result.error || "Errore durante l'eliminazione");
       }
     } catch (e: any) {
       setError("Eccezione: " + (e.message || "Unknown error"));
@@ -140,7 +160,7 @@ export default function AdminDashboard() {
         </div>
 
         {error && (
-          <div className="mb-8 p-4 bg-red-950/20 border border-red-900 text-red-500 rounded-xl text-xs font-mono">
+          <div className="mb-8 p-4 bg-red-950/20 border border-red-900 text-red-500 rounded-xl text-xs font-mono whitespace-pre-wrap">
             <strong>ERRORE:</strong> {error}
           </div>
         )}
@@ -172,7 +192,18 @@ export default function AdminDashboard() {
               <div className="space-y-6">
                 <div className="flex justify-between items-center mb-4">
                   <h2 className="text-xl font-bold uppercase tracking-widest">Editing: {selectedItem.slug}</h2>
-                  {selectedItem.sha && <span className="text-[10px] font-mono text-gray-600 uppercase">File Verificato su GitHub</span>}
+                  <div className="flex gap-4 items-center">
+                    {selectedItem.sha && <span className="text-[10px] font-mono text-gray-600 uppercase">SHA: {selectedItem.sha.substring(0,7)}</span>}
+                    {!selectedItem.isNew && (
+                      <button 
+                        onClick={handleDelete}
+                        disabled={loading}
+                        className="text-[10px] font-black text-red-800 hover:text-red-500 uppercase tracking-widest transition-all"
+                      >
+                        [ Elimina ]
+                      </button>
+                    )}
+                  </div>
                 </div>
                 
                 <div className="grid grid-cols-2 gap-x-6 gap-y-4 bg-zinc-900/30 p-6 rounded-2xl border border-white/5">
@@ -184,7 +215,6 @@ export default function AdminDashboard() {
                           className="w-full h-32 bg-black/50 p-3 rounded-lg border border-white/10 text-white text-xs font-mono" 
                           value={typeof editMetadata[key] === 'object' ? JSON.stringify(editMetadata[key], null, 2) : editMetadata[key]} 
                           onChange={e => setEditMetadata({...editMetadata, [key]: e.target.value})} 
-                          placeholder='[{"id": 1, "title": "Video 1", "thumb": "URL", "duration": "5:00", "desc": "..."}]'
                         />
                       ) : key === "description" || key === "desc" || key === "excerpt" ? (
                         <textarea 
@@ -217,12 +247,12 @@ export default function AdminDashboard() {
                   disabled={loading}
                   className={`px-10 py-4 bg-red-900 text-white font-bold rounded-xl uppercase tracking-widest shadow-lg hover:bg-white hover:text-black transition-all ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
                 >
-                  {loading ? "Commit in corso..." : "Salva Modifiche e Pusha su GitHub"}
+                  {loading ? "Processo Git..." : "Salva e Pusha su GitHub"}
                 </button>
               </div>
             ) : (
               <div className="h-full flex items-center justify-center text-gray-700 uppercase tracking-widest text-xs font-black italic">
-                {loading ? "Recupero dati..." : "Seleziona un elemento o clicca su 'Aggiungi Nuovo'"}
+                {loading ? "Attesa GitHub API..." : "Seleziona un elemento o clicca su 'Aggiungi Nuovo'"}
               </div>
             )}
           </div>
