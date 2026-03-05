@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useLanguage } from "@/context/LanguageContext";
 
 export const newsIssues = [
+  {"slug":"articolo-2","title":"Nuova News","date":"05 Mar 2026","excerpt":"Sommario della news...articolo 2","category":"AI Research","image":"https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&q=80&w=800"},
   {"slug":"articolo-test","title":"Questo è  un articolo di prova","date":"05 Mar 2026","excerpt":"sottotitolo home articolo di prova","category":"AI Research","image":"https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&q=80&w=800"},
   {"slug":"deepseek-v4-deep-dive"},
   {"slug":"grok-4-20-parallel-agents"},
