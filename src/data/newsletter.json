@@ -1,6 +1,6 @@
-﻿[
+[
   { "slug": "grok-4-20-parallel-agents", "title": "Grok 4.20: Il Trionfo del Parallelismo Multi-Agente", "date": "05 Mar 2026", "excerpt": "xAI riscrive le regole con 4 agenti paralleli interni. Efficienza e ragionamento estremi.", "category": "LLM Architecture", "image": "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=800" },
-  { "slug": "rag-renaissance", "title": "The RAG Renaissance", "date": "15 Feb 2026", "excerpt": "PerchÃ© il cosine similarity non basta piÃ¹? Intro a Hybrid Search.", "category": "Architecture", "image": "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=800" },
+  { "slug": "rag-renaissance", "title": "The RAG Renaissance", "date": "15 Feb 2026", "excerpt": "Perché il cosine similarity non basta più? Intro a Hybrid Search.", "category": "Architecture", "image": "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=800" },
   { "slug": "agentic-workflows", "title": "Agentic Workflows", "date": "01 Feb 2026", "excerpt": "La differenza tra Chat e Agente. Architetture ReAct.", "category": "Agents", "image": "https://images.unsplash.com/photo-1664575602276-acd073f104c1?auto=format&fit=crop&q=80&w=800" },
   { "slug": "local-llm-optimization", "title": "Local LLM", "date": "18 Gen 2026", "excerpt": "Analisi tecnica della quantizzazione 4-bit e 8-bit.", "category": "Optimization", "image": "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&q=80&w=800" }
 ]
