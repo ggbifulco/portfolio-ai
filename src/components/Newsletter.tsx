@@ -6,11 +6,12 @@ import Link from "next/link";
 import { useLanguage } from "@/context/LanguageContext";
 
 export const newsIssues = [
+  { slug: "liquid-neural-networks", title: "Liquid Neural Networks: Oltre i Transformer", date: "05 Mar 2026", excerpt: "Dinamicità biologica e tempo continuo. Come le LNN stanno sfidando il dominio dell'architettura Transformer.", category: "AI Research", image: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&q=80&w=800" },
   { slug: "vla-robotics", title: "The Convergence: VLA Models and Physical AI", date: "05 Mar 2026", excerpt: "Dagli LLM ai corpi fisici. Come i modelli Vision-Language-Action stanno rivoluzionando la robotica umanoide.", category: "Robotics", image: "https://images.unsplash.com/photo-1546776230-bb86256870ce?auto=format&fit=crop&q=80&w=800" },
   { slug: "sovereign-llm", title: "The Sovereign LLM: L'Alba dell'Indipendenza Open-Source", date: "05 Mar 2026", excerpt: "Il divario tra Closed e Open Source si chiude. Analisi tecnica di Llama 4 e DeepSeek-V4.", category: "Open Source", image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=800" },
   { slug: "deepseek-v4-deep-dive", title: "DeepSeek-V4: Anatomia di un Gigante MoE", date: "05 Mar 2026", excerpt: "Sparsity 2.0, Engram e Multi-Token Prediction. Analisi tecnica dell'architettura da 1 Trilione di parametri.", category: "Architecture", image: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&q=80&w=800" },
   { slug: "grok-4-20-parallel-agents", title: "Grok 4.20: Il Trionfo del Parallelismo Multi-Agente", date: "05 Mar 2026", excerpt: "xAI riscrive le regole con 4 agenti paralleli interni. Efficienza e ragionamento estremi.", category: "LLM Architecture", image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=800" },
-  { slug: "rag-renaissance", title: "The RAG Renaissance", date: "15 Feb 2026", excerpt: "PerchÃƒÆ’Ã‚Â© il cosine similarity non basta piÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¹? Intro a Hybrid Search.", category: "Architecture", image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=800" },
+  { slug: "rag-renaissance", title: "The RAG Renaissance", date: "15 Feb 2026", excerpt: "PerchÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â© il cosine similarity non basta piÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¹? Intro a Hybrid Search.", category: "Architecture", image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=800" },
   { slug: "agentic-workflows", title: "Agentic Workflows", date: "01 Feb 2026", excerpt: "La differenza tra Chat e Agente. Architetture ReAct.", category: "Agents", image: "https://images.unsplash.com/photo-1664575602276-acd073f104c1?auto=format&fit=crop&q=80&w=800" },
   { slug: "local-llm-optimization", title: "Local LLM", date: "18 Gen 2026", excerpt: "Analisi tecnica della quantizzazione 4-bit e 8-bit.", category: "Optimization", image: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&q=80&w=800" },
   { slug: "multimodality-vision", title: "Vision Encoders", date: "05 Gen 2026", excerpt: "How CLIP and SigLIP are changing vision pipelines.", category: "Vision", image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=800" },
@@ -97,7 +98,7 @@ export default function NewsletterPreview() {
           ))}
         </div>
 
-        {/* Compact subscribe row ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â mobile only */}
+        {/* Compact subscribe row ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â mobile only */}
         <div className="sm:hidden flex gap-2 mb-4">
           <input
             type="email"
@@ -109,7 +110,7 @@ export default function NewsletterPreview() {
           </button>
         </div>
 
-        {/* Full subscribe CTA ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â sm+ only */}
+        {/* Full subscribe CTA ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â sm+ only */}
         <div className="hidden sm:block relative p-5 sm:p-8 bg-gradient-to-br from-red-900/30 to-black/30 backdrop-blur-xl rounded-2xl sm:rounded-[3rem] border border-white/10 overflow-hidden shadow-2xl">
           <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 sm:gap-8">
             <div className="max-w-md">
