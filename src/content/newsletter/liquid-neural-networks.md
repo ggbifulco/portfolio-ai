@@ -4,23 +4,23 @@
 ## ðŸ‡®ðŸ‡¹ Versione Italiana
 
 ### Abstract Tecnico
-A Marzo 2026, la supremazia dell'architettura Transformer Ã¨ messa in discussione da una nuova classe di modelli: le **Liquid Neural Networks (LNN)**. Sviluppate inizialmente al MIT, queste reti si ispirano alla flessibilitÃ  del sistema nervoso di organismi semplici come il nematode *C. elegans*. A differenza dei modelli statici, le LNN adattano i loro parametri in tempo reale durante l'inferenza, offrendo un'efficienza computazionale senza precedenti e una capacitÃ  di generalizzazione superiore in ambienti dinamici.
+A Marzo 2026, la supremazia dell'architettura Transformer è messa in discussione da una nuova classe di modelli: le **Liquid Neural Networks (LNN)**. Sviluppate inizialmente al MIT, queste reti si ispirano alla flessibilità del sistema nervoso di organismi semplici come il nematode *C. elegans*. A differenza dei modelli statici, le LNN adattano i loro parametri in tempo reale durante l'inferenza, offrendo un'efficienza computazionale senza precedenti e una capacità di generalizzazione superiore in ambienti dinamici.
 
 ---
 
 ![Liquid Neural Networks Concept](https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&q=80&w=1200)
-*Figura 1: Visualizzazione concettuale della dinamicitÃ  di una rete neurale liquida, capace di adattarsi a flussi di dati continui.*
+*Figura 1: Visualizzazione concettuale della dinamicità di una rete neurale liquida, capace di adattarsi a flussi di dati continui.*
 
 ---
 
 ### 1. Dinamica Temporale Continua
-Il cuore tecnico delle LNN risiede nella loro capacitÃ  di modellare il tempo come una variabile continua, non discreta. Mentre un Transformer analizza "token" separati, una rete liquida risolve equazioni differenziali ordinarie (ODE) per descrivere l'evoluzione dello stato nascosto del modello.
+Il cuore tecnico delle LNN risiede nella loro capacità di modellare il tempo come una variabile continua, non discreta. Mentre un Transformer analizza "token" separati, una rete liquida risolve equazioni differenziali ordinarie (ODE) per descrivere l'evoluzione dello stato nascosto del modello.
 
-L'equazione fondamentale che governa il cambiamento dello stato $h(t)$ Ã¨:
+L'equazione fondamentale che governa il cambiamento dello stato $h(t)$ è:
 
 $$ \frac{dh}{dt} = - \frac{h(t)}{\tau} + S(t) \cdot (A - h(t)) $$
 
-*Dove $\tau$ Ã¨ la costante di tempo del neurone e $S(t)$ rappresenta l'input modulato dinamicamente.*
+*Dove $\tau$ è la costante di tempo del neurone e $S(t)$ rappresenta l'input modulato dinamicamente.*
 
 ---
 
@@ -55,10 +55,10 @@ new_hidden = layer(input_data, hidden)
 ---
 
 ### 3. Considerazioni Strategiche
-PerchÃ© dovremmo guardare alle LNN oggi?
-- **Efficienza Estrema:** Un modello liquido puÃ² eseguire task di navigazione con solo poche centinaia di neuroni, contro i milioni richiesti da un MLP.
-- **Explainability:** Essendo basate su principi bio-fisici, Ã¨ piÃ¹ facile mappare il comportamento della rete alle variabili di input.
-- **Edge Computing:** Sono i candidati ideali per la robotica e i droni, dove la potenza di calcolo Ã¨ limitata.
+Perché dovremmo guardare alle LNN oggi?
+- **Efficienza Estrema:** Un modello liquido può eseguire task di navigazione con solo poche centinaia di neuroni, contro i milioni richiesti da un MLP.
+- **Explainability:** Essendo basate su principi bio-fisici, è più facile mappare il comportamento della rete alle variabili di input.
+- **Edge Computing:** Sono i candidati ideali per la robotica e i droni, dove la potenza di calcolo è limitata.
 
 ---
 
@@ -124,4 +124,4 @@ Why should we look at LNNs today?
 ---
 
 ## Conclusion / Conclusione
-Le Liquid Neural Networks rappresentano il passo successivo verso un'AI piÃ¹ "viva" e adattabile. Il futuro della robotica passerÃ  inevitabilmente per questi algoritmi a tempo continuo.
+Le Liquid Neural Networks rappresentano il passo successivo verso un'AI più "viva" e adattabile. Il futuro della robotica passerà inevitabilmente per questi algoritmi a tempo continuo.

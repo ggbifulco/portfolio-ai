@@ -2,7 +2,7 @@
 *(English Version follows below)*
 
 ## Abstract Tecnico
-A Marzo 2026, il panorama dell'Intelligenza Artificiale ha raggiunto un punto di flesso critico. Il divario tra i modelli proprietari "Closed-Source" e quelli "Open-Weights" si Ã¨ ufficialmente annullato, portando alla nascita della **Sovereignty AI**. Grazie a nuove architetture a **SparsitÃ  Dinamica**, tecniche di **Quantizzazione Probabilistica** e un'ottimizzazione senza precedenti del calcolo all'inferenza, l'indipendenza tecnologica Ã¨ ora alla portata di ogni sviluppatore. Questo articolo esplora i dettagli tecnici di questa rivoluzione e come implementarla oggi.
+A Marzo 2026, il panorama dell'Intelligenza Artificiale ha raggiunto un punto di flesso critico. Il divario tra i modelli proprietari "Closed-Source" e quelli "Open-Weights" si è ufficialmente annullato, portando alla nascita della **Sovereignty AI**. Grazie a nuove architetture a **Sparsità Dinamica**, tecniche di **Quantizzazione Probabilistica** e un'ottimizzazione senza precedenti del calcolo all'inferenza, l'indipendenza tecnologica è ora alla portata di ogni sviluppatore. Questo articolo esplora i dettagli tecnici di questa rivoluzione e come implementarla oggi.
 
 ---
 
@@ -15,7 +15,7 @@ A Marzo 2026, il panorama dell'Intelligenza Artificiale ha raggiunto un punto di
 La spina dorsale di Llama 4 e DeepSeek-V4 risiede nel meccanismo **MoE (Mixture-of-Experts)** potenziato da layer di **Conditional Gating**. A differenza dei modelli densi, dove ogni parametro viene attivato per ogni token, i modelli sovrani del 2026 utilizzano un router neurale che seleziona solo gli esperti necessari.
 
 ### Ottimizzazione del Routing
-La funzione di costo per bilanciare il carico tra gli esperti Ã¨ definita come:
+La funzione di costo per bilanciare il carico tra gli esperti è definita come:
 
 $$ J(\theta) = \sum_{x \in \mathcal{D}} \left( \mathcal{L}_{task}(x, y) + \lambda \cdot \mathcal{L}_{balance}(x) \right) $$
 
@@ -24,7 +24,7 @@ Dove $\mathcal{L}_{balance}$ previene il fenomeno del "Expert Collapse", garante
 ---
 
 ## 2. Implementazione Tecnica: Caricamento Asincrono e Quantizzazione
-Per eseguire un modello da 400 miliardi di parametri su hardware con memoria limitata, utilizziamo la **Quantizzazione 4-bit KM**. Questo riduce l'impronta di memoria di un fattore 4 senza una perdita significativa di perplessitÃ .
+Per eseguire un modello da 400 miliardi di parametri su hardware con memoria limitata, utilizziamo la **Quantizzazione 4-bit KM**. Questo riduce l'impronta di memoria di un fattore 4 senza una perdita significativa di perplessità.
 
 Ecco come configurare un'istanza di inferenza ottimizzata in Python:
 
@@ -41,13 +41,13 @@ config = sai.Config(
     device_map="auto"
 )
 
-# Utilizzo di SparseAttention per ridurre la complessitÃ  quadratica dell'attenzione
+# Utilizzo di SparseAttention per ridurre la complessità quadratica dell'attenzione
 model = sai.AutoModelForCausalLM.from_pretrained(
     config=config,
     attention_implementation=SparseAttention
 )
 
-# Esempio di generazione con modalitÃ  'Deep Think' (Inference-time Scaling)
+# Esempio di generazione con modalità 'Deep Think' (Inference-time Scaling)
 output = model.generate(
     "Spiega l'implementazione del Parallel Task Orchestrator",
     max_new_tokens=2048,
@@ -61,12 +61,12 @@ print(output)
 ---
 
 ## 3. Considerazioni Strategiche e Sicurezza
-L'adozione di un'AI Sovrana non Ã¨ solo una scelta di performance, ma una garanzia di privacy. Elaborando i dati localmente, eliminiamo la necessitÃ  di condividere informazioni sensibili con terze parti.
+L'adozione di un'AI Sovrana non è solo una scelta di performance, ma una garanzia di privacy. Elaborando i dati localmente, eliminiamo la necessità di condividere informazioni sensibili con terze parti.
 
 ### Vantaggi Chiave per le Aziende:
 1. **Zero Data Leakage:** I dati non lasciano mai il perimetro aziendale.
 2. **Latenza Deterministica:** Nessuna dipendenza dalla congestione delle API cloud.
-3. **Customizzazione Estrema:** PossibilitÃ  di eseguire il fine-tuning su dataset proprietari senza restrizioni di censura esterna.
+3. **Customizzazione Estrema:** Possibilità di eseguire il fine-tuning su dataset proprietari senza restrizioni di censura esterna.
 
 ---
 

@@ -54,7 +54,7 @@ The convergence of high-speed NPUs, sparse VLA architectures, and modular humano
 # LA CONVERGENZA: MODELLI VLA E L'ASCESA DELLA PHYSICAL AI NEL 2026
 
 ## Abstract Tecnico
-A Marzo 2026, il panorama dell'intelligenza artificiale si Ã¨ spostato dal "cervello digitale" (LLM) al "corpo fisico" (**Physical AI**). La svolta risiede nei **Modelli VLA (Vision-Language-Action)**, che unificano percezione visiva, ragionamento linguistico ed esecuzione motoria in un unico framework neurale. Questo articolo esplora come modelli come **Robo-Transformer 3 (RT-3)** e **VLA-Optimus di Tesla** stiano risolvendo il "Paradosso di Moravec" e permettendo ai robot umanoidi di eseguire compiti non strutturati e zero-shot in ambienti reali.
+A Marzo 2026, il panorama dell'intelligenza artificiale si è spostato dal "cervello digitale" (LLM) al "corpo fisico" (**Physical AI**). La svolta risiede nei **Modelli VLA (Vision-Language-Action)**, che unificano percezione visiva, ragionamento linguistico ed esecuzione motoria in un unico framework neurale. Questo articolo esplora come modelli come **Robo-Transformer 3 (RT-3)** e **VLA-Optimus di Tesla** stiano risolvendo il "Paradosso di Moravec" e permettendo ai robot umanoidi di eseguire compiti non strutturati e zero-shot in ambienti reali.
 
 ---
 
@@ -64,7 +64,7 @@ A Marzo 2026, il panorama dell'intelligenza artificiale si Ã¨ spostato dal "ce
 ---
 
 ## 1. La Rivoluzione VLA: Dalla Predizione all'Esecuzione
-L'innovazione core del 2026 Ã¨ il passaggio dalla **Generazione di Testo Autoregressiva** alla **Tokenizzazione dell'Azione Autoregressiva**. I modelli VLA trattano i movimenti delle articolazioni e le coppie motorie come token, proprio come le parole in una frase.
+L'innovazione core del 2026 è il passaggio dalla **Generazione di Testo Autoregressiva** alla **Tokenizzazione dell'Azione Autoregressiva**. I modelli VLA trattano i movimenti delle articolazioni e le coppie motorie come token, proprio come le parole in una frase.
 
 ### La Matematica della Tokenizzazione dell'Azione
 Un modello VLA prende un'immagine $I_t$, un'istruzione in linguaggio naturale $L$ e una cronologia degli stati $S_{1:t}$ per predire l'azione successiva $a_t$:
@@ -84,19 +84,19 @@ Nel 2026, l'hardware ha finalmente raggiunto il software.
 ---
 
 ![Destrezza della Mano Umanoide](https://images.unsplash.com/photo-1558494949-ef010cbdcc51?auto=format&fit=crop&q=80&w=1200)
-*Figura 2: Dettaglio di una mano umanoide con 28 gradi di libertÃ , essenziale per la destrezza richiesta dai modelli VLA.*
+*Figura 2: Dettaglio di una mano umanoide con 28 gradi di libertà, essenziale per la destrezza richiesta dai modelli VLA.*
 
 ---
 
 ## 3. Robotica Open-Source: Il Progetto "LeRobot" di Hugging Face
-La democratizzazione della Physical AI Ã¨ guidata da progetti come **LeRobot** di Hugging Face. Gli sviluppatori possono ora scaricare backbone VLA pre-addestrati ed eseguirne il fine-tuning per compiti domestici o industriali specifici utilizzando la **Low-Rank Adaptation (LoRA)** sulle traiettorie robotiche.
+La democratizzazione della Physical AI è guidata da progetti come **LeRobot** di Hugging Face. Gli sviluppatori possono ora scaricare backbone VLA pre-addestrati ed eseguirne il fine-tuning per compiti domestici o industriali specifici utilizzando la **Low-Rank Adaptation (LoRA)** sulle traiettorie robotiche.
 
 ### Considerazioni Strategiche:
 1. **Sicurezza Prima di Tutto:** Implementazione di token di "Emergency Stop" a livello hardware.
 2. **Inferenza On-Device:** L'importanza delle NPU (Neural Processing Units) con alti TOPS (Tera Operations Per Second) per evitare la dipendenza dal cloud.
-3. **Raccolta Dati:** L'ascesa del **Teleoperation-as-a-Service** per raccogliere dimostrazioni robotiche di alta qualitÃ .
+3. **Raccolta Dati:** L'ascesa del **Teleoperation-as-a-Service** per raccogliere dimostrazioni robotiche di alta qualità.
 
 ---
 
 ## Conclusione
-La convergenza di NPU ad alta velocitÃ , architetture VLA sparse e hardware umanoide modulare sta creando una nuova industria. Il robot non Ã¨ piÃ¹ uno strumento; Ã¨ un agente autonomo capace di comprendere e interagire con il mondo fisico.
+La convergenza di NPU ad alta velocità, architetture VLA sparse e hardware umanoide modulare sta creando una nuova industria. Il robot non è più uno strumento; è un agente autonomo capace di comprendere e interagire con il mondo fisico.
