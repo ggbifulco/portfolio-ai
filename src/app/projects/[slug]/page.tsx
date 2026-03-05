@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import React, { useEffect, useState } from "react";
 import Navbar from "@/components/Navbar";
 import { motion } from "framer-motion";
@@ -14,10 +14,10 @@ export default function ProjectDetail() {
   const params = useParams();
   const [content, setContent] = useState("");
   
-  const project = projectsData.find(p => p.slug === params.slug) || projectsData[0];
+  const project = (projectsData.find(p => p.slug === params.slug) || projectsData[0]) as any;
+  const techStack = Array.isArray(project?.tech) ? project.tech : [];
 
   useEffect(() => {
-    // Carichiamo il file markdown corrispondente allo slug del progetto
     fetch(`/api/content?type=projects&slug=${params.slug}`)
       .then(res => res.json())
       .then(data => setContent(data.content))
@@ -27,9 +27,9 @@ export default function ProjectDetail() {
   return (
     <main className="bg-black min-h-screen text-white pb-32 font-sans">
       <Navbar />
-      
+
       {/* Project Hero Header */}
-      <section className="pt-28 sm:pt-36 lg:pt-48 pb-10 sm:pb-16 lg:pb-20 px-4 sm:px-6 lg:px-10 border-b border-white/5 bg-[radial-gradient(circle_at_50%_0%,rgba(153,0,36,0.1),transparent_50%)]">
+      <section className="pt-28 sm:pt-36 lg:pt-48 pb-10 sm:pb-16 lg:pb-20 px-4 sm:px-6 lg:px-10 border-b border-white/5 bg-[radial-gradient(circle_at_50%_0%,rgba(153,0,36,0.15),transparent_50%)]">
         <div className="max-w-6xl mx-auto">
           <Link href="/projects" className="inline-flex items-center gap-2 text-red-700 font-bold mb-8 sm:mb-12 hover:gap-4 transition-all uppercase tracking-widest text-xs">
             <ArrowLeft size={16} /> {t.projects.viewAll}
@@ -38,7 +38,7 @@ export default function ProjectDetail() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 items-end">
             <div>
               <div className="flex flex-wrap gap-2 sm:gap-3 mb-4 sm:mb-6">
-                {project.tech.map((t: string) => (
+                {techStack.map((t: string) => (
                   <span key={t} className="px-3 sm:px-4 py-1.5 bg-white/5 border border-white/10 rounded-full text-[10px] font-black text-red-600 uppercase tracking-widest">
                     {t}
                   </span>
@@ -79,12 +79,12 @@ export default function ProjectDetail() {
           {/* Sidebar Info */}
           <div className="lg:col-span-4 space-y-8 sm:space-y-12">
             <div>
-              <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-600 mb-4 sm:mb-6 flex items-center gap-2">
+              <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-600 mb-4 sm:mb-6 flex items-center gap-2">  
                 <Cpu size={14} className="text-red-700" /> Core Tech
               </h3>
               <div className="space-y-3 sm:space-y-4">
-                {project.tech.map((t: string) => (
-                  <div key={t} className="flex items-center justify-between p-3 sm:p-4 bg-white/5 border border-white/5 rounded-xl">
+                {techStack.map((t: string) => (
+                  <div key={t} className="flex items-center justify-between p-3 sm:p-4 bg-white/5 border border-white/5 rounded-xl"> 
                     <span className="text-sm font-bold text-white">{t}</span>
                     <Layers size={14} className="text-gray-700" />
                   </div>

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import React from "react";
 import { motion } from "framer-motion";
 import { Github, ExternalLink, Grid } from "lucide-react";
@@ -10,6 +10,8 @@ export { projectsData };
 
 export function ProjectCard({ project, idx }: { project: any, idx: number }) {
   const { t } = useLanguage();
+  const techStack = Array.isArray(project?.tech) ? project.tech : [];
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -23,10 +25,10 @@ export function ProjectCard({ project, idx }: { project: any, idx: number }) {
       </Link>
       <div className="p-4 sm:p-5 flex flex-col flex-grow">
         <h3 className="text-lg sm:text-xl font-bold text-white mb-1 group-hover:text-red-500 transition-colors">{project.title}</h3>
-        <p className="text-gray-400 text-[11px] leading-relaxed mb-3 sm:mb-4 flex-grow line-clamp-2 font-light">{project.desc}</p>
+        <p className="text-gray-400 text-[11px] leading-relaxed mb-3 sm:mb-4 flex-grow line-clamp-2 font-light">{project.desc}</p>   
 
         <div className="flex flex-wrap gap-1.5 mb-3 sm:mb-5">
-          {project.tech.map((tech: string) => (
+          {techStack.map((tech: string) => (
             <span key={tech} className="px-2 py-0.5 bg-red-950/30 border border-red-900/30 rounded-md text-[7px] font-black uppercase tracking-widest text-red-500/80">
               {tech}
             </span>
