@@ -64,7 +64,7 @@ export default function NewsDetail() {
               ul: ({node, ...props}) => <ul className="list-disc list-outside mb-8 space-y-4 text-gray-300 ml-6" {...props} />,
               li: ({node, ...props}) => <li className="pl-2" {...props} />,
               strong: ({node, ...props}) => <strong className="font-bold text-white bg-red-900/20 px-1 rounded" {...props} />,
-              code: ({node, inline, ...props}) => inline ? 
+              code: ({node, className, children, ...props}: any) => !className ? 
                 <code className="bg-red-950/30 px-2 py-0.5 rounded text-red-400 font-mono text-sm border border-red-900/20" {...props} /> :
                 <div className="relative my-10 group">
                   <div className="absolute -inset-2 bg-gradient-to-r from-red-900/20 to-transparent rounded-xl blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
