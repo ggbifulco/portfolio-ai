@@ -1,4 +1,4 @@
-import Script from "next/script";`n"use client";
+"use client";
 import React, { useEffect, useState } from "react";
 import Navbar from "@/components/Navbar";
 import { motion } from "framer-motion";
@@ -7,6 +7,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import ReactMarkdown from "react-markdown";
+import Script from "next/script";
 import newsIssues from "@/data/newsletter.json";
 
 export default function NewsDetail() {
@@ -28,9 +29,9 @@ export default function NewsDetail() {
     h2: ({node, ...props}: any) => <h2 className="text-2xl font-black uppercase tracking-tight mb-8 mt-12 text-white flex items-center gap-3"><span className="w-2 h-8 bg-red-700 block"></span>{props.children}</h2>,
     h3: ({node, ...props}: any) => <h3 className="text-xl font-bold uppercase mb-6 mt-10 text-red-500" {...props} />,
     p: ({node, ...props}: any) => {
-      const content = props.children;
-      if (typeof content === "string" && content.startsWith("$") && content.endsWith("$")) {
-        return <div className="math-block my-12 text-center text-white bg-red-950/10 p-8 rounded-2xl border border-red-900/10 overflow-x-auto shadow-inner">{content.slice(2, -2)}</div>;
+      const children = props.children;
+      if (typeof children === "string" && children.startsWith("$$") && children.endsWith("$$")) {
+        return <div className="math-block my-12 text-center text-white bg-red-950/10 p-8 rounded-2xl border border-red-900/10 overflow-x-auto shadow-inner">{children.slice(2, -2)}</div>;
       }
       return <p className="mb-8 leading-relaxed text-gray-300 text-lg font-light text-justify" {...props} />;
     },
@@ -39,7 +40,6 @@ export default function NewsDetail() {
     strong: ({node, ...props}: any) => <strong className="font-bold text-white bg-red-900/20 px-1 rounded" {...props} />,
     blockquote: ({node, ...props}: any) => <blockquote className="border-l-4 border-red-700 pl-8 my-10 italic text-xl text-gray-400 font-serif" {...props} />,
     code: ({node, className, children, ...props}: any) => {
-      const match = /language-(\w+)/.exec(className || "");
       return !className ? (
         <code className="bg-red-950/30 px-2 py-0.5 rounded text-red-400 font-mono text-sm border border-red-900/20" {...props}>
           {children}
@@ -69,7 +69,8 @@ export default function NewsDetail() {
   };
 
   return (
-    <main><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" integrity="sha384-nAnmEnC99465+3+8c+X6pW9d3+69N9N9N9N9N9N9N9N9N9N9N9N9N9N9N9N9N9" crossorigin="anonymous" /> className="bg-black min-h-screen text-white pb-32 font-sans">
+    <main className="bg-black min-h-screen text-white pb-32 font-sans">
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" integrity="sha384-nAnmEnC99465+3+8c+X6pW9d3+69N9N9N9N9N9N9N9N9N9N9N9N9N9N9N9N9N9" crossorigin="anonymous" />
       <Navbar />
       <section className="pt-28 sm:pt-36 lg:pt-48 pb-10 sm:pb-16 lg:pb-20 px-4 sm:px-6 lg:px-10 border-b border-white/5 bg-[radial-gradient(circle_at_50%_0%,rgba(153,0,36,0.1),transparent_50%)]">
         <div className="max-w-4xl mx-auto">
@@ -95,18 +96,19 @@ export default function NewsDetail() {
       <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-10">
         <div className="max-w-3xl mx-auto">
           <div className="markdown-content text-gray-300">
-            <ReactMarkdown components={markdownComponents}>{content}</ReactMarkdown><Script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" strategy="afterInteractive" onLoad={() => {
-    document.querySelectorAll(".math-block").forEach((el) => {
-        try {
-            (window as any).katex.render(el.textContent, el, { displayMode: true, throwOnError: false });
-        } catch (e) { console.error(e); }
-    });
-    document.querySelectorAll(".math-inline").forEach((el) => {
-        try {
-            (window as any).katex.render(el.textContent, el, { displayMode: false, throwOnError: false });
-        } catch (e) { console.error(e); }
-    });
-}} />
+            <ReactMarkdown components={markdownComponents}>{content}</ReactMarkdown>
+            <Script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" strategy="afterInteractive" onLoad={() => {
+                const renderMath = () => {
+                    (document.querySelectorAll(".math-block") as any).forEach((el: any) => {
+                        try {
+                            if (window && (window as any).katex) {
+                                (window as any).katex.render(el.textContent, el, { displayMode: true, throwOnError: false });
+                            }
+                        } catch (e) { console.error(e); }
+                    });
+                };
+                renderMath();
+            }} />
           </div>
         </div>
       </section>
