@@ -224,7 +224,7 @@ export default function NewsletterPreview() {
   const mobileIssues = validIssues.slice(0, 3);
 
   return (
-    <section id="newsletter" className="flex flex-col justify-center px-4 sm:px-6 lg:px-10 bg-transparent relative overflow-hidden pt-16 sm:pt-20 lg:pt-24" style={{ height: "100dvh" }}>
+    <section id="newsletter" className="h-full flex flex-col justify-center px-4 sm:px-6 lg:px-10 bg-transparent relative overflow-hidden pt-16 sm:pt-20 lg:pt-24 pb-4">
       <div className="max-w-7xl mx-auto w-full relative z-10">
         <div className="mb-5 sm:mb-7 flex flex-wrap justify-between items-end gap-3">
           <h2 className="text-3xl sm:text-4xl lg:text-6xl font-black text-white uppercase tracking-tight leading-none drop-shadow-xl">
