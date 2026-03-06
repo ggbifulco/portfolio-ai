@@ -59,31 +59,31 @@ export function NewsCard({ issue, idx, featured = false }: { issue: any, idx: nu
             Featured
           </span>
         </Link>
-        <div className="p-5 sm:p-7 flex flex-col flex-grow justify-between">
-          <div>
-            <div className="flex flex-wrap items-center gap-2 mb-3">
-              <span className={`px-2 py-0.5 border rounded-md text-[7px] font-black uppercase tracking-widest ${categoryClass(issue.category)}`}>
-                {issue.category}
-              </span>
-              <span className="text-gray-600 text-[8px] font-bold tracking-widest uppercase flex items-center gap-1">
-                <Clock size={9} /> {readingTime(issue.excerpt)}
-              </span>
-              <span className="text-gray-600 text-[8px] tracking-widest uppercase flex items-center gap-1 ml-auto">
-                <Calendar size={9} /> {issue.date}
-              </span>
-            </div>
-            <h3 className="text-xl sm:text-2xl font-black text-white mb-3 group-hover:text-red-400 transition-colors duration-300 leading-tight">
-              {issue.title}
-            </h3>
-            <p className="text-gray-400 text-xs leading-relaxed line-clamp-3 font-light">{issue.excerpt}</p>
+        <div className="p-5 sm:p-7 flex flex-col flex-grow">
+          <div className="flex flex-wrap items-center gap-2 mb-4">
+            <span className={`px-2 py-0.5 border rounded-md text-[7px] font-black uppercase tracking-widest ${categoryClass(issue.category)}`}>
+              {issue.category}
+            </span>
+            <span className="text-gray-600 text-[8px] font-bold tracking-widest uppercase flex items-center gap-1">
+              <Clock size={9} /> {readingTime(issue.excerpt)}
+            </span>
+            <span className="text-gray-600 text-[8px] tracking-widest uppercase flex items-center gap-1 ml-auto">
+              <Calendar size={9} /> {issue.date}
+            </span>
           </div>
-          <Link
-            href={`/newsletter/${issue.slug}`}
-            className="mt-5 inline-flex items-center gap-2 text-white font-black text-[9px] uppercase tracking-widest group/link"
-          >
-            <span className="group-hover/link:text-red-400 transition-colors">{t.common.read}</span>
-            <ArrowRight size={13} className="text-red-700 group-hover/link:translate-x-1.5 transition-transform duration-300" />
-          </Link>
+          <h3 className="text-xl sm:text-2xl font-black text-white mb-4 group-hover:text-red-400 transition-colors duration-300 leading-tight">
+            {issue.title}
+          </h3>
+          <p className="text-gray-400 text-sm leading-relaxed font-light mb-6 flex-grow">{issue.excerpt}</p>
+          <div className="border-t border-white/5 pt-5">
+            <Link
+              href={`/newsletter/${issue.slug}`}
+              className="inline-flex items-center gap-2 text-white font-black text-[9px] uppercase tracking-widest group/link"
+            >
+              <span className="group-hover/link:text-red-400 transition-colors">{t.common.read}</span>
+              <ArrowRight size={13} className="text-red-700 group-hover/link:translate-x-1.5 transition-transform duration-300" />
+            </Link>
+          </div>
         </div>
       </motion.div>
     );
@@ -224,8 +224,8 @@ export default function NewsletterPreview() {
   const mobileIssues = validIssues.slice(0, 3);
 
   return (
-    <section id="newsletter" className="flex flex-col justify-center px-4 sm:px-6 lg:px-10 bg-transparent relative overflow-hidden" style={{ height: "100dvh" }}>
-      <div className="max-w-7xl mx-auto w-full relative z-10 pt-16 sm:pt-20">
+    <section id="newsletter" className="flex flex-col justify-center px-4 sm:px-6 lg:px-10 bg-transparent relative overflow-hidden pt-16 sm:pt-20 lg:pt-24" style={{ height: "100dvh" }}>
+      <div className="max-w-7xl mx-auto w-full relative z-10">
         <div className="mb-5 sm:mb-7 flex flex-wrap justify-between items-end gap-3">
           <h2 className="text-3xl sm:text-4xl lg:text-6xl font-black text-white uppercase tracking-tight leading-none drop-shadow-xl">
             {t.newsletter.title}
