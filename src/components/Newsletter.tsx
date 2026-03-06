@@ -145,12 +145,33 @@ function SubscribeForm({ compact = false }: { compact?: boolean }) {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [focused, setFocused] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !email.includes("@")) return;
+    
     setLoading(true);
-    setTimeout(() => { setLoading(false); setSubmitted(true); }, 900);
+    setError("");
+
+    try {
+      const response = await fetch('/api/newsletter', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+
+      if (response.ok) {
+        setSubmitted(true);
+      } else {
+        const data = await response.json();
+        setError(data.error || "Errore durante l'iscrizione");
+      }
+    } catch (err) {
+      setError("Errore di connessione");
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (submitted) {
@@ -167,52 +188,58 @@ function SubscribeForm({ compact = false }: { compact?: boolean }) {
 
   if (compact) {
     return (
-      <form onSubmit={handleSubmit} className="flex gap-2">
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder={t.newsletter.placeholder}
-          className="flex-1 min-w-0 px-4 py-2.5 bg-black/40 border border-white/10 rounded-xl text-white focus:outline-none focus:border-red-900/60 focus:ring-1 focus:ring-red-900/40 text-xs transition-all duration-300"
-        />
+      <div className="flex flex-col gap-2">
+        <form onSubmit={handleSubmit} className="flex gap-2">
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder={t.newsletter.placeholder}
+            className="flex-1 min-w-0 px-4 py-2.5 bg-black/40 border border-white/10 rounded-xl text-white focus:outline-none focus:border-red-900/60 focus:ring-1 focus:ring-red-900/40 text-xs transition-all duration-300"
+          />
+          <button
+            type="submit"
+            disabled={loading}
+            className="relative flex-shrink-0 px-4 py-2.5 bg-red-900 text-white font-black rounded-xl text-[9px] uppercase tracking-widest shadow-lg disabled:opacity-60 overflow-hidden group"
+          >
+            <span className="relative z-10">{loading ? "..." : t.newsletter.btn}</span>
+            <span className="absolute inset-0 shimmer opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          </button>
+        </form>
+        {error && <p className="text-red-500 text-[8px] uppercase tracking-widest">{error}</p>}
+      </div>
+    );
+  }
+
+  return (
+    <div className="w-full lg:w-auto flex flex-col gap-2">
+      <form onSubmit={handleSubmit} className="w-full lg:w-auto flex gap-2 sm:gap-3">
+        <div className="relative flex-1 min-w-0">
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            onFocus={() => setFocused(true)}
+            onBlur={() => setFocused(false)}
+            placeholder={t.newsletter.placeholder}
+            className="w-full px-4 sm:px-6 py-3 bg-black/40 border border-white/10 rounded-xl text-white focus:outline-none text-xs backdrop-blur-md transition-all duration-300"
+            style={{
+              borderColor: focused ? "rgba(153,0,36,0.6)" : undefined,
+              boxShadow: focused ? "0 0 0 1px rgba(153,0,36,0.3), 0 0 16px rgba(107,0,26,0.15)" : undefined,
+            }}
+          />
+        </div>
         <button
           type="submit"
           disabled={loading}
-          className="relative flex-shrink-0 px-4 py-2.5 bg-red-900 text-white font-black rounded-xl text-[9px] uppercase tracking-widest shadow-lg disabled:opacity-60 overflow-hidden group"
+          className="relative flex-shrink-0 px-5 sm:px-10 py-3 bg-red-900 text-white font-black rounded-xl hover:bg-white hover:text-black transition-all duration-300 uppercase tracking-widest text-[9px] shadow-lg whitespace-nowrap disabled:opacity-60 overflow-hidden group"
         >
           <span className="relative z-10">{loading ? "..." : t.newsletter.btn}</span>
           <span className="absolute inset-0 shimmer opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         </button>
       </form>
-    );
-  }
-
-  return (
-    <form onSubmit={handleSubmit} className="w-full lg:w-auto flex gap-2 sm:gap-3">
-      <div className="relative flex-1 min-w-0">
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          onFocus={() => setFocused(true)}
-          onBlur={() => setFocused(false)}
-          placeholder={t.newsletter.placeholder}
-          className="w-full px-4 sm:px-6 py-3 bg-black/40 border border-white/10 rounded-xl text-white focus:outline-none text-xs backdrop-blur-md transition-all duration-300"
-          style={{
-            borderColor: focused ? "rgba(153,0,36,0.6)" : undefined,
-            boxShadow: focused ? "0 0 0 1px rgba(153,0,36,0.3), 0 0 16px rgba(107,0,26,0.15)" : undefined,
-          }}
-        />
-      </div>
-      <button
-        type="submit"
-        disabled={loading}
-        className="relative flex-shrink-0 px-5 sm:px-10 py-3 bg-red-900 text-white font-black rounded-xl hover:bg-white hover:text-black transition-all duration-300 uppercase tracking-widest text-[9px] shadow-lg whitespace-nowrap disabled:opacity-60 overflow-hidden group"
-      >
-        <span className="relative z-10">{loading ? "..." : t.newsletter.btn}</span>
-        <span className="absolute inset-0 shimmer opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-      </button>
-    </form>
+      {error && <p className="text-red-500 text-[8px] uppercase tracking-widest text-center lg:text-left">{error}</p>}
+    </div>
   );
 }
 
