@@ -49,11 +49,22 @@ export default function About() {
     { label: t.about.mentorship, val: "500+", icon: <Users size={16} className="text-red-800" /> },
   ];
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formState.name || !formState.email || !formState.message) return;
     setLoading(true);
-    setTimeout(() => { setLoading(false); setSubmitted(true); }, 900);
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formState),
+      });
+      if (res.ok) {
+        setSubmitted(true);
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   const focusStyle = (field: string) => focusedField === field

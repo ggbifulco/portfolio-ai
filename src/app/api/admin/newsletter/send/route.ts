@@ -24,35 +24,49 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Errore nel recupero dei contatti' }, { status: 500 });
     }
 
-    const emails = contactsData.data.map(c => c.email);
+    const contacts = contactsData.data.filter(c => !c.unsubscribed);
+    const emails = contacts.map(c => c.email);
 
     if (emails.length === 0) {
-      return NextResponse.json({ error: 'Nessun iscritto trovato' }, { status: 400 });
+      return NextResponse.json({ error: 'Nessun iscritto attivo trovato' }, { status: 400 });
     }
 
-    // 2. Invia l'email in batch (Resend supporta fino a 100 email per chiamata batch)
-    // Per gestire più di 100 iscritti servirebbe un loop, ma per ora usiamo l'invio semplice
-    const { data, error } = await resend.emails.send({
-      from: 'Future Intelligence <newsletter@futureintelligence.space>',
-      to: emails,
-      subject: subject,
-      html: `
-        <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-          ${content}
-          <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;" />
-          <p style="font-size: 10px; color: #aaa; text-align: center;">
-            Ricevi questa email perché ti sei iscritto alla newsletter di Future Intelligence.<br>
-            © 2026 Giuseppe Gerardo Bifulco
-          </p>
-        </div>
-      `,
-    });
+    const emailHtml = `
+      <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+        ${content}
+        <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;" />
+        <p style="font-size: 10px; color: #aaa; text-align: center;">
+          Ricevi questa email perché ti sei iscritto alla newsletter di Future Intelligence.<br>
+          © 2026 Giuseppe Gerardo Bifulco
+        </p>
+      </div>
+    `;
 
-    if (error) {
-      return NextResponse.json({ error }, { status: 400 });
+    // Invia email individuale a ciascun iscritto (nessuno vede le email degli altri)
+    // Resend batch supporta max 100 email per chiamata — chunk se necessario
+    const CHUNK_SIZE = 100;
+    const chunks: string[][] = [];
+    for (let i = 0; i < emails.length; i += CHUNK_SIZE) {
+      chunks.push(emails.slice(i, i + CHUNK_SIZE));
     }
 
-    return NextResponse.json({ success: true, count: emails.length });
+    let totalSent = 0;
+    for (const chunk of chunks) {
+      const batch = chunk.map(email => ({
+        from: 'Future Intelligence <newsletter@futureintelligence.space>',
+        to: [email],
+        subject,
+        html: emailHtml,
+      }));
+
+      const { data, error } = await resend.batch.send(batch);
+      if (error) {
+        return NextResponse.json({ error }, { status: 400 });
+      }
+      totalSent += chunk.length;
+    }
+
+    return NextResponse.json({ success: true, count: totalSent });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
