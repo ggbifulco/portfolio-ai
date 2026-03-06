@@ -15,7 +15,7 @@ export async function POST(req: Request) {
     const { data, error } = await resend.emails.send({
       from: 'Portfolio Contact <contact@futureintelligence.space>',
       to: 'bifulcogiuseppegerardo@gmail.com',
-      reply_to: email,
+      replyTo: email,
       subject: `[Portfolio] Messaggio da ${name}${company ? ` — ${company}` : ''}`,
       html: `
         <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; background: #0a0a0a; color: #fff; border-radius: 12px;">
