@@ -35,58 +35,51 @@ export function ProjectCard({ project, idx }: { project: any, idx: number }) {
   const techStack = Array.isArray(project?.tech) ? project.tech : [];
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      whileHover={{ y: -8, transition: { duration: 0.3, ease: "easeOut" } }}
-      transition={{ delay: idx * 0.12, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-      className="group relative flex flex-col bg-black/60 backdrop-blur-md border border-white/5 rounded-[2rem] overflow-hidden transition-all duration-500 shadow-xl h-full"
-      style={{
-        boxShadow: "0 8px 32px rgba(0,0,0,0.4)",
-      }}
-      onMouseEnter={e => {
-        (e.currentTarget as HTMLElement).style.boxShadow = "0 16px 48px rgba(107,0,26,0.25), 0 0 0 1px rgba(153,0,36,0.2)";
-      }}
-      onMouseLeave={e => {
-        (e.currentTarget as HTMLElement).style.boxShadow = "0 8px 32px rgba(0,0,0,0.4)";
-      }}
-    >
-      <Link href={`/projects/${project.slug}`} className="block overflow-hidden relative h-32 sm:h-40">
-        <img
-          src={project.image}
-          alt={project.title}
-          className="w-full h-full object-cover grayscale opacity-50 group-hover:grayscale-0 group-hover:opacity-90 group-hover:scale-105 transition-all duration-700"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
-      </Link>
-
-      <div className="p-4 sm:p-5 flex flex-col flex-grow">
-        <h3 className="text-lg sm:text-xl font-bold text-white mb-1.5 group-hover:text-red-400 transition-colors duration-300">
-          {project.title}
-        </h3>
-        <p className="text-gray-500 text-[11px] leading-relaxed mb-3 sm:mb-4 flex-grow line-clamp-2 font-light">
-          {project.desc}
-        </p>
-
-        <div className="flex flex-wrap gap-1.5 mb-4">
-          {techStack.map((tech: string) => (
-            <span
-              key={tech}
-              className={`px-2 py-0.5 border rounded-md text-[7px] font-black uppercase tracking-widest transition-all duration-300 ${tagClass(tech)}`}
-            >
-              {tech}
-            </span>
-          ))}
+    <Link href={`/projects/${project.slug}`} className="block h-full">
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        whileHover={{ y: -8, transition: { duration: 0.3, ease: "easeOut" } }}
+        transition={{ delay: idx * 0.12, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        className="group relative flex flex-col bg-black/60 backdrop-blur-md border border-white/5 rounded-[2rem] overflow-hidden transition-all duration-500 shadow-xl h-full cursor-pointer"
+        style={{ boxShadow: "0 8px 32px rgba(0,0,0,0.4)" }}
+        onMouseEnter={e => { (e.currentTarget as HTMLElement).style.boxShadow = "0 16px 48px rgba(107,0,26,0.25), 0 0 0 1px rgba(153,0,36,0.2)"; }}
+        onMouseLeave={e => { (e.currentTarget as HTMLElement).style.boxShadow = "0 8px 32px rgba(0,0,0,0.4)"; }}
+      >
+        <div className="overflow-hidden relative h-32 sm:h-40">
+          <img
+            src={project.image}
+            alt={project.title}
+            className="w-full h-full object-cover grayscale opacity-50 group-hover:grayscale-0 group-hover:opacity-90 group-hover:scale-105 transition-all duration-700"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
         </div>
 
-        <Link
-          href={`/projects/${project.slug}`}
-          className="w-full py-2.5 bg-white/5 border border-white/10 rounded-xl text-white font-bold text-[9px] flex items-center justify-center gap-2 group-hover:bg-red-900 group-hover:border-red-800 transition-all duration-300 uppercase tracking-widest"
-        >
-          {t.projects.viewCase} <ExternalLink size={12} />
-        </Link>
-      </div>
-    </motion.div>
+        <div className="p-4 sm:p-5 flex flex-col flex-grow">
+          <h3 className="text-lg sm:text-xl font-bold text-white mb-1.5 group-hover:text-red-400 transition-colors duration-300">
+            {project.title}
+          </h3>
+          <p className="text-gray-500 text-[11px] leading-relaxed mb-3 sm:mb-4 flex-grow line-clamp-2 font-light">
+            {project.desc}
+          </p>
+
+          <div className="flex flex-wrap gap-1.5 mb-4">
+            {techStack.map((tech: string) => (
+              <span
+                key={tech}
+                className={`px-2 py-0.5 border rounded-md text-[7px] font-black uppercase tracking-widest transition-all duration-300 ${tagClass(tech)}`}
+              >
+                {tech}
+              </span>
+            ))}
+          </div>
+
+          <div className="w-full py-2.5 bg-white/5 border border-white/10 rounded-xl text-white font-bold text-[9px] flex items-center justify-center gap-2 group-hover:bg-red-900 group-hover:border-red-800 transition-all duration-300 uppercase tracking-widest">
+            {t.projects.viewCase} <ExternalLink size={12} />
+          </div>
+        </div>
+      </motion.div>
+    </Link>
   );
 }
 

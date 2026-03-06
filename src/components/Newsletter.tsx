@@ -40,102 +40,102 @@ export function NewsCard({ issue, idx, featured = false }: { issue: any, idx: nu
   const { t } = useLanguage();
   if (!issue?.title || !issue?.image) return null;
 
+  const href = `/newsletter/${issue.slug}`;
+
   if (featured) {
     return (
-      <motion.div
-        initial={{ opacity: 0, y: 24 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        whileHover={{ y: -6, transition: { duration: 0.3, ease: "easeOut" } }}
-        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-        className="group bg-black/60 backdrop-blur-md border border-white/5 rounded-[2rem] overflow-hidden transition-all duration-500 shadow-xl flex flex-col sm:flex-row h-full"
-        style={{ boxShadow: "0 8px 32px rgba(0,0,0,0.5)" }}
-        onMouseEnter={e => { (e.currentTarget as HTMLElement).style.boxShadow = "0 16px 48px rgba(107,0,26,0.2), 0 0 0 1px rgba(153,0,36,0.2)"; }}
-        onMouseLeave={e => { (e.currentTarget as HTMLElement).style.boxShadow = "0 8px 32px rgba(0,0,0,0.5)"; }}
-      >
-        <Link href={`/newsletter/${issue.slug}`} className="block sm:w-2/5 overflow-hidden relative h-44 sm:h-auto flex-shrink-0">
-          <img src={issue.image} alt={issue.title} className="w-full h-full object-cover grayscale opacity-50 group-hover:grayscale-0 group-hover:opacity-90 group-hover:scale-105 transition-all duration-700" />
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent to-black/60 sm:bg-gradient-to-r" />
-          <span className="absolute top-3 left-3 px-2.5 py-1 bg-red-900/80 border border-red-700/50 rounded-lg text-[8px] font-black uppercase tracking-widest text-white backdrop-blur-sm">
-            Featured
-          </span>
-        </Link>
-        <div className="p-5 sm:p-7 flex flex-col flex-grow">
-          <div className="flex flex-wrap items-center gap-2 mb-4">
-            <span className={`px-2 py-0.5 border rounded-md text-[7px] font-black uppercase tracking-widest ${categoryClass(issue.category)}`}>
-              {issue.category}
-            </span>
-            <span className="text-gray-600 text-[8px] font-bold tracking-widest uppercase flex items-center gap-1">
-              <Clock size={9} /> {readingTime(issue.excerpt)}
-            </span>
-            <span className="text-gray-600 text-[8px] tracking-widest uppercase flex items-center gap-1 ml-auto">
-              <Calendar size={9} /> {issue.date}
+      <Link href={href} className="block h-full">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          whileHover={{ y: -6, transition: { duration: 0.3, ease: "easeOut" } }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          className="group bg-black/60 backdrop-blur-md border border-white/5 rounded-[2rem] overflow-hidden transition-all duration-500 shadow-xl flex flex-col sm:flex-row h-full cursor-pointer"
+          style={{ boxShadow: "0 8px 32px rgba(0,0,0,0.5)" }}
+          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.boxShadow = "0 16px 48px rgba(107,0,26,0.2), 0 0 0 1px rgba(153,0,36,0.2)"; }}
+          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.boxShadow = "0 8px 32px rgba(0,0,0,0.5)"; }}
+        >
+          <div className="sm:w-2/5 overflow-hidden relative h-44 sm:h-auto flex-shrink-0">
+            <img src={issue.image} alt={issue.title} className="w-full h-full object-cover grayscale opacity-50 group-hover:grayscale-0 group-hover:opacity-90 group-hover:scale-105 transition-all duration-700" />
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent to-black/60 sm:bg-gradient-to-r" />
+            <span className="absolute top-3 left-3 px-2.5 py-1 bg-red-900/80 border border-red-700/50 rounded-lg text-[8px] font-black uppercase tracking-widest text-white backdrop-blur-sm">
+              Featured
             </span>
           </div>
-          <h3 className="text-xl sm:text-2xl font-black text-white mb-4 group-hover:text-red-400 transition-colors duration-300 leading-tight">
-            {issue.title}
-          </h3>
-          <p className="text-gray-400 text-sm leading-relaxed font-light mb-6 flex-grow">{issue.excerpt}</p>
-          <div className="border-t border-white/5 pt-5">
-            <Link
-              href={`/newsletter/${issue.slug}`}
-              className="inline-flex items-center gap-2 text-white font-black text-[9px] uppercase tracking-widest group/link"
-            >
-              <span className="group-hover/link:text-red-400 transition-colors">{t.common.read}</span>
-              <ArrowRight size={13} className="text-red-700 group-hover/link:translate-x-1.5 transition-transform duration-300" />
-            </Link>
+          <div className="p-5 sm:p-7 flex flex-col flex-grow">
+            <div className="flex flex-wrap items-center gap-2 mb-4">
+              <span className={`px-2 py-0.5 border rounded-md text-[7px] font-black uppercase tracking-widest ${categoryClass(issue.category)}`}>
+                {issue.category}
+              </span>
+              <span className="text-gray-600 text-[8px] font-bold tracking-widest uppercase flex items-center gap-1">
+                <Clock size={9} /> {readingTime(issue.excerpt)}
+              </span>
+              <span className="text-gray-600 text-[8px] tracking-widest uppercase flex items-center gap-1 ml-auto">
+                <Calendar size={9} /> {issue.date}
+              </span>
+            </div>
+            <h3 className="text-xl sm:text-2xl font-black text-white mb-4 group-hover:text-red-400 transition-colors duration-300 leading-tight">
+              {issue.title}
+            </h3>
+            <p className="text-gray-400 text-sm leading-relaxed font-light mb-6 flex-grow">{issue.excerpt}</p>
+            <div className="border-t border-white/5 pt-5">
+              <span className="inline-flex items-center gap-2 text-white font-black text-[9px] uppercase tracking-widest">
+                <span className="group-hover:text-red-400 transition-colors">{t.common.read}</span>
+                <ArrowRight size={13} className="text-red-700 group-hover:translate-x-1.5 transition-transform duration-300" />
+              </span>
+            </div>
           </div>
-        </div>
-      </motion.div>
+        </motion.div>
+      </Link>
     );
   }
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      whileHover={{ y: -6, transition: { duration: 0.3, ease: "easeOut" } }}
-      transition={{ delay: idx * 0.1, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-      className="group bg-black/60 backdrop-blur-md border border-white/5 rounded-[2rem] overflow-hidden transition-all duration-500 shadow-xl h-full flex flex-col"
-      style={{ boxShadow: "0 8px 32px rgba(0,0,0,0.4)" }}
-      onMouseEnter={e => { (e.currentTarget as HTMLElement).style.boxShadow = "0 16px 48px rgba(107,0,26,0.2), 0 0 0 1px rgba(153,0,36,0.2)"; }}
-      onMouseLeave={e => { (e.currentTarget as HTMLElement).style.boxShadow = "0 8px 32px rgba(0,0,0,0.4)"; }}
-    >
-      <Link href={`/newsletter/${issue.slug}`} className="block overflow-hidden relative h-28 sm:h-32">
-        <img src={issue.image} alt={issue.title} className="w-full h-full object-cover grayscale opacity-50 group-hover:grayscale-0 group-hover:opacity-90 group-hover:scale-105 transition-all duration-700" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/10 to-transparent" />
-      </Link>
-
-      <div className="p-4 sm:p-5 flex flex-col flex-grow">
-        <div className="flex flex-wrap items-center gap-2 mb-3">
-          <span className={`px-2 py-0.5 border rounded-md text-[7px] font-black uppercase tracking-widest ${categoryClass(issue.category)}`}>
-            {issue.category}
-          </span>
-          <span className="text-gray-600 text-[8px] font-bold tracking-widest uppercase flex items-center gap-1 ml-auto">
-            <Clock size={9} /> {readingTime(issue.excerpt)}
-          </span>
+    <Link href={href} className="block h-full">
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        whileHover={{ y: -6, transition: { duration: 0.3, ease: "easeOut" } }}
+        transition={{ delay: idx * 0.1, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        className="group bg-black/60 backdrop-blur-md border border-white/5 rounded-[2rem] overflow-hidden transition-all duration-500 shadow-xl h-full flex flex-col cursor-pointer"
+        style={{ boxShadow: "0 8px 32px rgba(0,0,0,0.4)" }}
+        onMouseEnter={e => { (e.currentTarget as HTMLElement).style.boxShadow = "0 16px 48px rgba(107,0,26,0.2), 0 0 0 1px rgba(153,0,36,0.2)"; }}
+        onMouseLeave={e => { (e.currentTarget as HTMLElement).style.boxShadow = "0 8px 32px rgba(0,0,0,0.4)"; }}
+      >
+        <div className="overflow-hidden relative h-28 sm:h-32">
+          <img src={issue.image} alt={issue.title} className="w-full h-full object-cover grayscale opacity-50 group-hover:grayscale-0 group-hover:opacity-90 group-hover:scale-105 transition-all duration-700" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/10 to-transparent" />
         </div>
 
-        <h3 className="text-base sm:text-lg font-bold text-white mb-2 group-hover:text-red-400 transition-colors duration-300 leading-tight">
-          {issue.title}
-        </h3>
-        <p className="text-gray-500 text-[10px] mb-4 leading-relaxed line-clamp-2 font-light flex-grow">
-          {issue.excerpt}
-        </p>
+        <div className="p-4 sm:p-5 flex flex-col flex-grow">
+          <div className="flex flex-wrap items-center gap-2 mb-3">
+            <span className={`px-2 py-0.5 border rounded-md text-[7px] font-black uppercase tracking-widest ${categoryClass(issue.category)}`}>
+              {issue.category}
+            </span>
+            <span className="text-gray-600 text-[8px] font-bold tracking-widest uppercase flex items-center gap-1 ml-auto">
+              <Clock size={9} /> {readingTime(issue.excerpt)}
+            </span>
+          </div>
 
-        <div className="flex items-center justify-between mt-auto pt-3 border-t border-white/5">
-          <span className="text-gray-700 text-[8px] tracking-widest uppercase flex items-center gap-1">
-            <Calendar size={9} /> {issue.date}
-          </span>
-          <Link
-            href={`/newsletter/${issue.slug}`}
-            className="inline-flex items-center gap-1.5 text-white font-bold text-[9px] uppercase tracking-widest group/link"
-          >
-            <span className="group-hover/link:text-red-400 transition-colors">{t.common.read}</span>
-            <ArrowRight size={11} className="text-red-700 group-hover/link:translate-x-1 transition-transform duration-300" />
-          </Link>
+          <h3 className="text-base sm:text-lg font-bold text-white mb-2 group-hover:text-red-400 transition-colors duration-300 leading-tight">
+            {issue.title}
+          </h3>
+          <p className="text-gray-500 text-[10px] mb-4 leading-relaxed line-clamp-2 font-light flex-grow">
+            {issue.excerpt}
+          </p>
+
+          <div className="flex items-center justify-between mt-auto pt-3 border-t border-white/5">
+            <span className="text-gray-700 text-[8px] tracking-widest uppercase flex items-center gap-1">
+              <Calendar size={9} /> {issue.date}
+            </span>
+            <span className="inline-flex items-center gap-1.5 text-white font-bold text-[9px] uppercase tracking-widest">
+              <span className="group-hover:text-red-400 transition-colors">{t.common.read}</span>
+              <ArrowRight size={11} className="text-red-700 group-hover:translate-x-1 transition-transform duration-300" />
+            </span>
+          </div>
         </div>
-      </div>
-    </motion.div>
+      </motion.div>
+    </Link>
   );
 }
 

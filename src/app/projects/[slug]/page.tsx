@@ -9,6 +9,8 @@ import { useParams } from "next/navigation";
 import ReactMarkdown from "react-markdown";
 import { projectsData } from "@/components/Projects";
 
+function isHtml(str: string) { return str.trimStart().startsWith("<"); }
+
 export default function ProjectDetail() {
   const { t } = useLanguage();
   const params = useParams();
@@ -71,9 +73,13 @@ export default function ProjectDetail() {
             <h2 className="text-xl sm:text-2xl font-black uppercase tracking-widest mb-8 sm:mb-12 text-white flex items-center gap-4">
               Technical Overview <div className="h-px flex-grow bg-white/5" />
             </h2>
-            <div className="markdown-content text-gray-300 leading-relaxed text-base sm:text-lg font-light space-y-6">
-              <ReactMarkdown>{content}</ReactMarkdown>
-            </div>
+            {isHtml(content) ? (
+              <div className="prose-content" dangerouslySetInnerHTML={{ __html: content }} />
+            ) : (
+              <div className="markdown-content text-gray-300 leading-relaxed text-base sm:text-lg font-light space-y-6">
+                <ReactMarkdown>{content}</ReactMarkdown>
+              </div>
+            )}
           </div>
 
           {/* Sidebar Info */}

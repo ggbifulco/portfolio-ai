@@ -1,5 +1,30 @@
 @import "tailwindcss";
 
+/* ─── Prose content (HTML from Rich Editor, rendered on article pages) ───── */
+.prose-content { color: #d1d5db; font-size: 1.0625rem; line-height: 1.8; }
+.prose-content h1 { font-size: 2.25rem; font-weight: 900; color: #fff; margin: 2.5rem 0 1rem; line-height: 1.15; text-transform: uppercase; letter-spacing: -0.02em; padding-bottom: 1rem; border-bottom: 2px solid #b91c1c; }
+.prose-content h2 { font-size: 1.5rem; font-weight: 900; color: #fff; margin: 2rem 0 0.75rem; line-height: 1.25; text-transform: uppercase; display: flex; align-items: center; gap: 0.75rem; }
+.prose-content h2::before { content: ""; display: block; width: 0.3rem; height: 2rem; background: #b91c1c; border-radius: 2px; flex-shrink: 0; }
+.prose-content h3 { font-size: 1.15rem; font-weight: 700; color: #ef4444; margin: 1.5rem 0 0.5rem; text-transform: uppercase; }
+.prose-content p { margin: 0 0 1.75rem; text-align: justify; }
+.prose-content strong { color: #fff; font-weight: 700; background: rgba(153,0,36,0.15); padding: 0 0.2em; border-radius: 3px; }
+.prose-content em { color: #d1d5db; font-style: italic; }
+.prose-content u { text-decoration-color: #6b7280; }
+.prose-content s { color: #6b7280; }
+.prose-content ul { list-style: disc; padding-left: 1.5rem; margin: 0 0 1.5rem; }
+.prose-content ol { list-style: decimal; padding-left: 1.5rem; margin: 0 0 1.5rem; }
+.prose-content li { margin: 0.4rem 0; }
+.prose-content blockquote { border-left: 4px solid #b91c1c; padding: 0.25rem 0 0.25rem 2rem; margin: 2rem 0; font-style: italic; font-size: 1.2rem; color: #9ca3af; font-family: Georgia, serif; }
+.prose-content code { background: rgba(153,0,36,0.2); padding: 0.1em 0.4em; border-radius: 4px; color: #f87171; font-family: monospace; font-size: 0.87em; border: 1px solid rgba(153,0,36,0.2); }
+.prose-content pre { background: #050505; border: 1px solid rgba(255,255,255,0.1); padding: 1.5rem; border-radius: 0.75rem; overflow-x: auto; margin: 2rem 0; }
+.prose-content pre code { background: none; border: none; color: #d4d4d8; padding: 0; font-size: 0.85rem; line-height: 1.6; }
+.prose-content hr { border: none; border-top: 1px solid rgba(255,255,255,0.08); margin: 2.5rem 0; }
+.prose-content a { color: #ef4444; text-decoration: underline; text-decoration-color: rgba(153,0,36,0.5); }
+.prose-content a:hover { color: #f87171; }
+.prose-content img { max-width: 100%; border-radius: 1rem; margin: 2rem 0; border: 1px solid rgba(255,255,255,0.08); display: block; box-shadow: 0 16px 48px rgba(0,0,0,0.5); }
+.prose-content [style*="text-align: center"] { text-align: center; }
+.prose-content [style*="text-align: right"] { text-align: right; }
+
 /* ─── Rich Text Editor (Tiptap) ───────────────────────────────────────────── */
 .rich-editor-content h1 { font-size: 1.75rem; font-weight: 900; color: #fff; margin: 1.25rem 0 0.5rem; line-height: 1.2; }
 .rich-editor-content h2 { font-size: 1.35rem; font-weight: 800; color: #fff; margin: 1rem 0 0.4rem; line-height: 1.3; }

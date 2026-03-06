@@ -10,6 +10,9 @@ import ReactMarkdown from "react-markdown";
 import Script from "next/script";
 import { newsIssues } from "@/components/Newsletter";
 
+// Rileva se il contenuto è HTML (da Tiptap) o Markdown (legacy)
+function isHtml(str: string) { return str.trimStart().startsWith("<"); }
+
 export default function NewsDetail() {
   const { t } = useLanguage();
   const params = useParams();
@@ -126,9 +129,16 @@ export default function NewsDetail() {
       </section>
       <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-10">
         <div className="max-w-3xl mx-auto">
-          <div className="markdown-content text-gray-300">
-            <ReactMarkdown components={markdownComponents}>{content}</ReactMarkdown>
-          </div>
+          {isHtml(content) ? (
+            <div
+              className="prose-content"
+              dangerouslySetInnerHTML={{ __html: content }}
+            />
+          ) : (
+            <div className="markdown-content text-gray-300">
+              <ReactMarkdown components={markdownComponents}>{content}</ReactMarkdown>
+            </div>
+          )}
         </div>
       </section>
     </main>
