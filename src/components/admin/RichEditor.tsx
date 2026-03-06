@@ -156,7 +156,7 @@ export default function RichEditor({
     const current = editor.getHTML();
     // Avoid loop: only setContent if actually different
     if (current !== value) {
-      editor.commands.setContent(value || "", false);
+      editor.commands.setContent(value || "", { emitUpdate: false });
     }
   }, [value, editor]);
 
