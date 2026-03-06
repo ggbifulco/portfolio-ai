@@ -224,10 +224,11 @@ export default function NewsletterPreview() {
   const mobileIssues = validIssues.slice(0, 3);
 
   return (
-    <section id="newsletter" className="h-full flex flex-col justify-center px-4 sm:px-6 lg:px-10 bg-transparent relative overflow-hidden pt-16 sm:pt-20 lg:pt-24 pb-4">
-      <div className="max-w-7xl mx-auto w-full relative z-10">
-        <div className="mb-5 sm:mb-7 flex flex-wrap justify-between items-end gap-3">
-          <h2 className="text-3xl sm:text-4xl lg:text-6xl font-black text-white uppercase tracking-tight leading-none drop-shadow-xl">
+    <section id="newsletter" className="h-full flex flex-col px-4 sm:px-6 lg:px-10 bg-transparent relative pt-16 sm:pt-20 lg:pt-24 pb-4">
+      <div className="max-w-7xl mx-auto w-full flex-1 flex flex-col min-h-0 relative z-10">
+        {/* Header */}
+        <div className="mb-4 sm:mb-5 flex flex-wrap justify-between items-end gap-3 flex-shrink-0">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white uppercase tracking-tight leading-none drop-shadow-xl">
             {t.newsletter.title}
           </h2>
           <Link
@@ -240,7 +241,7 @@ export default function NewsletterPreview() {
         </div>
 
         {/* Mobile: horizontal swipe carousel */}
-        <div className="md:hidden overflow-x-auto snap-x snap-mandatory no-scrollbar pb-3 mb-4">
+        <div className="md:hidden overflow-x-auto snap-x snap-mandatory no-scrollbar pb-3 mb-4 flex-shrink-0">
           <div className="flex gap-3" style={{ width: "max-content" }}>
             {mobileIssues.map((issue, idx) => (
               <div key={issue.slug} className="snap-start flex-shrink-0 w-[78vw]">
@@ -250,14 +251,14 @@ export default function NewsletterPreview() {
           </div>
         </div>
 
-        {/* Desktop: featured + 2 side cards */}
-        <div className="hidden md:grid grid-cols-3 gap-5 mb-5 lg:mb-7" style={{ gridTemplateRows: "1fr" }}>
-          <div className="col-span-2">
+        {/* Desktop: featured + 2 side cards — grows to fill space */}
+        <div className="hidden md:grid grid-cols-3 gap-4 mb-4 flex-1 min-h-0">
+          <div className="col-span-2 min-h-0">
             <NewsCard issue={featured} idx={0} featured />
           </div>
-          <div className="flex flex-col gap-5">
+          <div className="flex flex-col gap-4 min-h-0">
             {sideIssues.map((issue, idx) => (
-              <div key={issue.slug} className="flex-1">
+              <div key={issue.slug} className="flex-1 min-h-0">
                 <NewsCard issue={issue} idx={idx + 1} />
               </div>
             ))}
@@ -265,15 +266,15 @@ export default function NewsletterPreview() {
         </div>
 
         {/* Compact subscribe row — mobile only */}
-        <div className="sm:hidden mb-4">
+        <div className="sm:hidden mb-3 flex-shrink-0">
           <SubscribeForm compact />
         </div>
 
         {/* Full subscribe CTA — tablet/desktop */}
-        <div className="hidden sm:block relative p-5 sm:p-6 bg-gradient-to-br from-red-900/20 to-black/30 backdrop-blur-xl rounded-2xl sm:rounded-[2rem] border border-red-900/20 overflow-hidden shadow-2xl">
-          <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 sm:gap-8">
+        <div className="hidden sm:block flex-shrink-0 relative p-4 sm:p-5 bg-gradient-to-br from-red-900/20 to-black/30 backdrop-blur-xl rounded-2xl border border-red-900/20 overflow-hidden shadow-2xl">
+          <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-3 sm:gap-6">
             <div className="max-w-md">
-              <h3 className="text-base sm:text-lg font-black text-white mb-1 uppercase tracking-tight">{t.newsletter.ctaTitle}</h3>
+              <h3 className="text-sm sm:text-base font-black text-white mb-0.5 uppercase tracking-tight">{t.newsletter.ctaTitle}</h3>
               <p className="text-gray-400 text-[10px] font-light">{t.newsletter.ctaDesc}</p>
             </div>
             <SubscribeForm />
