@@ -27,13 +27,13 @@ function readingTime(text: string): string {
 export const newsIssues = [
   {"slug":"articolo-2","title":"Nuova News","date":"05 Mar 2026","excerpt":"Sommario della news...articolo 2","category":"AI Research","image":"https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&q=80&w=800"},
   {"slug":"articolo-test","title":"Questo è  un articolo di prova","date":"05 Mar 2026","excerpt":"sottotitolo home articolo di prova","category":"AI Research","image":"https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&q=80&w=800"},
-  {"slug":"deepseek-v4-deep-dive","title":"DeepSeek V4: Deep Dive","date":"01 Mar 2026","excerpt":"A comprehensive analysis of DeepSeek V4 capabilities and architecture insights.","category":"AI Research","image":"https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=800"},
-  {"slug":"grok-4-20-parallel-agents","title":"Grok 4.20 & Parallel Agents","date":"20 Feb 2026","excerpt":"How xAI's Grok 4.20 handles parallel agent orchestration at scale.","category":"Agents","image":"https://images.unsplash.com/photo-1664575602276-acd073f104c1?auto=format&fit=crop&q=80&w=800"},
-  {"slug":"liquid-neural-networks","title":"Liquid Neural Networks","date":"15 Feb 2026","excerpt":"Understanding adaptive computation in liquid neural network architectures.","category":"Research","image":"https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=800"},
-  {"slug":"rag-renaissance","title":"The RAG Renaissance","date":"10 Feb 2026","excerpt":"Why Retrieval-Augmented Generation is evolving beyond simple vector search.","category":"RAG","image":"https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=800"},
-  {"slug":"sovereign-llm","title":"Sovereign LLM Strategies","date":"05 Feb 2026","excerpt":"Building AI infrastructure with full data sovereignty and compliance.","category":"Infrastructure","image":"https://images.unsplash.com/photo-1605810230434-7631ac76ec81?auto=format&fit=crop&q=80&w=800"},
-  {"slug":"ttt-layers-deep-dive","title":"TTT Layers: Deep Dive","date":"28 Jan 2026","excerpt":"Test-Time Training layers and their impact on long-context reasoning.","category":"Research","image":"https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&q=80&w=800"},
-  {"slug":"vla-robotics","title":"VLA Models for Robotics","date":"20 Jan 2026","excerpt":"Vision-Language-Action models bridging AI and physical world manipulation.","category":"Robotics","image":"https://images.unsplash.com/photo-1589254065878-42c9da997008?auto=format&fit=crop&q=80&w=800"}
+  {"slug":"deepseek-v4-deep-dive"},
+  {"slug":"grok-4-20-parallel-agents"},
+  {"slug":"liquid-neural-networks"},
+  {"slug":"rag-renaissance"},
+  {"slug":"sovereign-llm"},
+  {"slug":"ttt-layers-deep-dive"},
+  {"slug":"vla-robotics"}
 ];
 
 export function NewsCard({ issue, idx, featured = false }: { issue: any, idx: number, featured?: boolean }) {
