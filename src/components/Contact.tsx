@@ -1,7 +1,7 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { Mail, Linkedin, Twitter, ArrowUpRight } from "lucide-react";
+import { Mail, Linkedin, Twitter, ArrowUpRight, CheckCircle } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 
 export default function Contact() {
@@ -47,9 +47,9 @@ export default function Contact() {
             </motion.h2>
             <p className="text-gray-300 text-lg font-light max-w-md leading-relaxed mb-8 drop-shadow-md">{t.contact.desc}</p>
             <div className="space-y-4">
-              <a href="mailto:tuamail@esempio.com" className="flex items-center gap-4 text-white hover:text-red-700 transition-all group">
+              <a href="mailto:bifulcogiuseppegerardo@gmail.com" className="flex items-center gap-4 text-white hover:text-red-700 transition-all group">
                 <div className="p-3 bg-white/5 backdrop-blur-md rounded-xl border border-white/10 group-hover:border-red-900/50"><Mail size={20} /></div>
-                <div><p className="text-[9px] uppercase tracking-widest text-gray-400 font-bold">{t.contact.labelName}</p><p className="text-sm font-medium">tuamail@esempio.com</p></div>
+                <div><p className="text-[9px] uppercase tracking-widest text-gray-400 font-bold">{t.contact.labelName}</p><p className="text-sm font-medium">bifulcogiuseppegerardo@gmail.com</p></div>
               </a>
               <div className="flex gap-4"><a href="#" className="p-3 bg-white/5 backdrop-blur-md border border-white/10 rounded-xl hover:bg-red-900 transition-all"><Linkedin size={18} /></a><a href="#" className="p-3 bg-white/5 backdrop-blur-md border border-white/10 rounded-xl hover:bg-red-700 transition-all"><Twitter size={18} /></a></div>
             </div>
