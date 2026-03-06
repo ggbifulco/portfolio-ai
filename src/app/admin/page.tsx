@@ -12,7 +12,7 @@ import {
 const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 
 // ─── Types ───────────────────────────────────────────────────────────────────
-type ContentType = "newsletter" | "projects" | "courses" | "pills";
+type ContentType = "newsletter" | "projects" | "courses" | "pills" | "broadcast";
 type ToastKind = "success" | "error" | "info";
 interface Toast { id: number; message: string; kind: ToastKind }
 interface FieldSchema {
@@ -52,6 +52,9 @@ const SCHEMAS: Record<string, FieldSchema[]> = {
     { key: "image",    label: "Copertina (URL)",   type: "image", fullWidth: true },
     { key: "videos",   label: "Video (JSON Array)", type: "json", fullWidth: true },
   ],
+  broadcast: [
+    { key: "subject", label: "Oggetto Email", type: "text", fullWidth: true, required: true, placeholder: "Es: Nuovi aggiornamenti su Future Intelligence" },
+  ]
 };
 
 const TYPE_META: Record<string, { label: string; icon: React.ReactNode; count?: number }> = {
@@ -59,6 +62,7 @@ const TYPE_META: Record<string, { label: string; icon: React.ReactNode; count?: 
   projects:   { label: "Progetti",   icon: <Hash size={14} /> },
   courses:    { label: "Corsi",      icon: <BookOpen size={14} /> },
   pills:      { label: "Pills",      icon: <Zap size={14} /> },
+  broadcast:  { label: "Broadcast",  icon: <Rocket size={14} /> },
 };
 
 // ─── Toast system ─────────────────────────────────────────────────────────────
@@ -377,6 +381,15 @@ export default function AdminDashboard() {
   }, []);
 
   const loadItems = useCallback(async (type: ContentType) => {
+    if (type === "broadcast") {
+      setActiveType("broadcast");
+      setSelectedItem({ slug: "new-broadcast", isNew: true });
+      setEditContent("");
+      setEditMetadata({ subject: "" });
+      setItems([]);
+      setIsDirty(false);
+      return;
+    }
     setLoading(true);
     setSyncMsg("Sincronizzazione GitHub…");
     try {
@@ -436,8 +449,51 @@ export default function AdminDashboard() {
     setIsDirty(true);
   };
 
+  const handleSendBroadcast = async () => {
+    if (!editMetadata.subject || !editContent) {
+      toast("Oggetto e contenuto sono obbligatori", "error");
+      return;
+    }
+
+    setConfirmModal({
+      title: "Invia Newsletter",
+      message: "Sei sicuro di voler inviare questa email a tutti gli iscritti? L'azione è irreversibile.",
+      onConfirm: async () => {
+        setConfirmModal(null);
+        setLoading(true);
+        setSyncMsg("Invio in corso…");
+        try {
+          const response = await fetch('/api/admin/newsletter/send', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              subject: editMetadata.subject,
+              content: editContent // Qui viene passato il contenuto (che può essere HTML o testo)
+            }),
+          });
+          const data = await response.json();
+          if (response.ok) {
+            toast(`Newsletter inviata con successo a ${data.count} iscritti!`, "success");
+            setIsDirty(false);
+          } else {
+            toast(data.error || "Errore durante l'invio", "error");
+          }
+        } catch (err) {
+          toast("Errore di connessione", "error");
+        } finally {
+          setLoading(false);
+          setSyncMsg("");
+        }
+      }
+    });
+  };
+
   const handleSave = useCallback(async () => {
     if (!selectedItem) return;
+    if (activeType === "broadcast") {
+      handleSendBroadcast();
+      return;
+    }
     setLoading(true);
     setSyncMsg("Pubblicazione in corso…");
     try {
