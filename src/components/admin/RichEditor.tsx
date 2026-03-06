@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
@@ -149,6 +149,16 @@ export default function RichEditor({
       },
     },
   });
+
+  // Sync editor content when value changes externally (e.g. switching items)
+  useEffect(() => {
+    if (!editor) return;
+    const current = editor.getHTML();
+    // Avoid loop: only setContent if actually different
+    if (current !== value) {
+      editor.commands.setContent(value || "", false);
+    }
+  }, [value, editor]);
 
   const insertLink = useCallback((url: string) => {
     setLinkDialog(false);
