@@ -3,40 +3,28 @@
     "slug": "ai-news-agent",
     "title": "BGG News-Agent",
     "desc": "Autonomous multi-agent system for technical AI journalism.",
-    "tech": [
-      "\\\"CrewAI\\\"",
-      "\\\"LangGraph\\\"",
-      "\\\"Gemini 1.5\\\"",
-      "\\\"Tavily\\\""
-    ],
+    "tech": ["CrewAI", "LangGraph", "Gemini 1.5", "Tavily"],
     "image": "https://images.unsplash.com/photo-1664575602276-acd073f104c1?auto=format&fit=crop&q=80&w=800"
   },
   {
     "slug": "documind",
-    "desc": ""
+    "title": "DocuMind",
+    "desc": "Intelligent document processing and semantic search pipeline.",
+    "tech": ["LangChain", "Pinecone", "GPT-4o", "FastAPI"],
+    "image": "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=800"
   },
   {
     "slug": "self-correcting-rag",
     "title": "Self-Correcting RAG",
     "desc": "Enterprise search system with automated hallucination detection.",
-    "tech": [
-      "\\\"LlamaIndex\\\"",
-      "\\\"Qdrant\\\"",
-      "\\\"Ragas\\\"",
-      "\\\"Claude 3.5\\\""
-    ],
+    "tech": ["LlamaIndex", "Qdrant", "Ragas", "Claude 3.5"],
     "image": "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=800"
   },
   {
     "slug": "vision-flow",
     "title": "VisionFlow",
     "desc": "Real-time multimodal video intelligence system.",
-    "tech": [
-      "\\\"YOLOv11\\\"",
-      "\\\"Moondream2\\\"",
-      "\\\"PyTorch\\\"",
-      "\\\"FastAPI\\\""
-    ],
+    "tech": ["YOLOv11", "Moondream2", "PyTorch", "FastAPI"],
     "image": "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=800"
   }
 ]

@@ -16,7 +16,7 @@ const robotoMono = Roboto_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Future Intelligence - AI Engineering & other stuffs",
+  title: "Future Intelligence - AI Engineering & Research",
   description: "Advanced AI Engineering portfolio featuring RAG, Agents, and LLM optimization.",
 };
 

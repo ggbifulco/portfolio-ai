@@ -1,35 +1,39 @@
 ﻿"use server";
 import matter from "gray-matter";
 
+function formatDate(d: Date): string {
+  return d.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
+}
+
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 const OWNER = process.env.GITHUB_OWNER || "ggbifulco";
 const REPO = process.env.GITHUB_REPO || "portfolio-ai";
 const BRANCH = "main";
 
 const CONFIG: any = {
-  newsletter: { 
-    dir: "src/content/newsletter", 
-    registry: "src/components/Newsletter.tsx", 
+  newsletter: {
+    dir: "src/content/newsletter",
+    registry: "src/components/Newsletter.tsx",
     marker: "export const newsIssues = [",
-    defaults: { title: "Nuova News", date: "05 Mar 2026", excerpt: "Sommario...", category: "AI Research", image: "" }
+    defaults: () => ({ title: "Nuova News", date: formatDate(new Date()), excerpt: "Sommario...", category: "AI Research", image: "" })
   },
-  projects: { 
-    dir: "src/content/projects", 
-    registry: "src/data/projects.json", 
+  projects: {
+    dir: "src/content/projects",
+    registry: "src/data/projects.json",
     isJson: true,
-    defaults: { title: "Nuovo Progetto", desc: "Descrizione...", tech: ["Python"], image: "" }
+    defaults: () => ({ title: "Nuovo Progetto", desc: "Descrizione...", tech: ["Python"], image: "" })
   },
-  courses: { 
-    dir: "src/content/academy/courses", 
-    registry: "src/components/Academy.tsx", 
+  courses: {
+    dir: "src/content/academy/courses",
+    registry: "src/components/Academy.tsx",
     marker: "export const coursesData = [",
-    defaults: { title: "Nuovo Corso", modules: 0, level: "Beginner", gradient: "from-red-900 to-red-600", category: "AI", image: "", description: "", videos: [] }
+    defaults: () => ({ title: "Nuovo Corso", modules: 0, level: "Beginner", gradient: "from-red-900 to-red-600", category: "AI", image: "", description: "", videos: [] })
   },
-  pills: { 
-    dir: "src/content/academy/pills", 
-    registry: "src/components/Academy.tsx", 
+  pills: {
+    dir: "src/content/academy/pills",
+    registry: "src/components/Academy.tsx",
     marker: "export const pillsData = [",
-    defaults: { title: "Nuova Pill", duration: "5 min", category: "Models", image: "", videos: [] }
+    defaults: () => ({ title: "Nuova Pill", duration: "5 min", category: "Models", image: "", videos: [] })
   }
 };
 
@@ -153,5 +157,6 @@ async function syncRegistry(type: string) {
 }
 
 export async function getDefaults(type: string) {
-  return CONFIG[type]?.defaults || {};
+  const d = CONFIG[type]?.defaults;
+  return typeof d === "function" ? d() : (d || {});
 }

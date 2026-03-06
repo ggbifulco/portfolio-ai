@@ -8,38 +8,81 @@ import projectsData from "@/data/projects.json";
 
 export { projectsData };
 
+// Color-code tech tags by keyword
+const TAG_PALETTE: [string[], string][] = [
+  [["python"],                        "bg-green-950/50 border-green-900/50 text-green-400/90"],
+  [["pytorch", "tensorflow"],         "bg-orange-950/50 border-orange-900/50 text-orange-400/90"],
+  [["langchain", "llamaindex"],       "bg-purple-950/50 border-purple-900/50 text-purple-400/90"],
+  [["openai", "gpt", "claude"],       "bg-emerald-950/50 border-emerald-900/50 text-emerald-400/90"],
+  [["docker", "kubernetes", "k8s"],   "bg-blue-950/50 border-blue-900/50 text-blue-400/90"],
+  [["react", "next", "vue"],          "bg-cyan-950/50 border-cyan-900/50 text-cyan-400/90"],
+  [["typescript", "javascript"],      "bg-yellow-950/50 border-yellow-900/50 text-yellow-400/90"],
+  [["fastapi", "flask", "django"],    "bg-teal-950/50 border-teal-900/50 text-teal-400/90"],
+  [["huggingface", "transformers"],   "bg-amber-950/50 border-amber-900/50 text-amber-400/90"],
+  [["crewai", "autogen", "agents"],   "bg-fuchsia-950/50 border-fuchsia-900/50 text-fuchsia-400/90"],
+];
+
+function tagClass(tech: string): string {
+  const lower = tech.toLowerCase();
+  for (const [keys, cls] of TAG_PALETTE) {
+    if (keys.some(k => lower.includes(k))) return cls;
+  }
+  return "bg-red-950/30 border-red-900/30 text-red-500/80";
+}
+
 export function ProjectCard({ project, idx }: { project: any, idx: number }) {
   const { t } = useLanguage();
   const techStack = Array.isArray(project?.tech) ? project.tech : [];
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
-      transition={{ delay: idx * 0.1 }}
-      className="group relative flex flex-col bg-black/60 backdrop-blur-md border border-white/5 rounded-[2rem] overflow-hidden hover:border-red-900/30 transition-all duration-500 shadow-xl h-full"
+      whileHover={{ y: -8, transition: { duration: 0.3, ease: "easeOut" } }}
+      transition={{ delay: idx * 0.12, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+      className="group relative flex flex-col bg-black/60 backdrop-blur-md border border-white/5 rounded-[2rem] overflow-hidden transition-all duration-500 shadow-xl h-full"
+      style={{
+        boxShadow: "0 8px 32px rgba(0,0,0,0.4)",
+      }}
+      onMouseEnter={e => {
+        (e.currentTarget as HTMLElement).style.boxShadow = "0 16px 48px rgba(107,0,26,0.25), 0 0 0 1px rgba(153,0,36,0.2)";
+      }}
+      onMouseLeave={e => {
+        (e.currentTarget as HTMLElement).style.boxShadow = "0 8px 32px rgba(0,0,0,0.4)";
+      }}
     >
-      <Link href={`/projects/${project.slug}`} className="block overflow-hidden aspect-video relative h-32 sm:h-40">
-        <img src={project.image} alt={project.title} className="w-full h-full object-cover grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-80" />
+      <Link href={`/projects/${project.slug}`} className="block overflow-hidden relative h-32 sm:h-40">
+        <img
+          src={project.image}
+          alt={project.title}
+          className="w-full h-full object-cover grayscale opacity-50 group-hover:grayscale-0 group-hover:opacity-90 group-hover:scale-105 transition-all duration-700"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
       </Link>
-      <div className="p-4 sm:p-5 flex flex-col flex-grow">
-        <h3 className="text-lg sm:text-xl font-bold text-white mb-1 group-hover:text-red-500 transition-colors">{project.title}</h3>
-        <p className="text-gray-400 text-[11px] leading-relaxed mb-3 sm:mb-4 flex-grow line-clamp-2 font-light">{project.desc}</p>   
 
-        <div className="flex flex-wrap gap-1.5 mb-3 sm:mb-5">
+      <div className="p-4 sm:p-5 flex flex-col flex-grow">
+        <h3 className="text-lg sm:text-xl font-bold text-white mb-1.5 group-hover:text-red-400 transition-colors duration-300">
+          {project.title}
+        </h3>
+        <p className="text-gray-500 text-[11px] leading-relaxed mb-3 sm:mb-4 flex-grow line-clamp-2 font-light">
+          {project.desc}
+        </p>
+
+        <div className="flex flex-wrap gap-1.5 mb-4">
           {techStack.map((tech: string) => (
-            <span key={tech} className="px-2 py-0.5 bg-red-950/30 border border-red-900/30 rounded-md text-[7px] font-black uppercase tracking-widest text-red-500/80">
+            <span
+              key={tech}
+              className={`px-2 py-0.5 border rounded-md text-[7px] font-black uppercase tracking-widest transition-all duration-300 ${tagClass(tech)}`}
+            >
               {tech}
             </span>
           ))}
         </div>
 
-        <div className="mb-3">
-          <p className="text-[7px] uppercase tracking-widest text-gray-600 font-bold">{t.common.author}</p>
-          <p className="text-[9px] text-white font-medium">Giuseppe Gerardo Bifulco</p>
-        </div>
-        <Link href={`/projects/${project.slug}`} className="w-full py-2.5 bg-white/5 border border-white/10 rounded-xl text-white font-bold text-[9px] flex items-center justify-center gap-2 group-hover:bg-red-900 transition-all uppercase tracking-widest">
+        <Link
+          href={`/projects/${project.slug}`}
+          className="w-full py-2.5 bg-white/5 border border-white/10 rounded-xl text-white font-bold text-[9px] flex items-center justify-center gap-2 group-hover:bg-red-900 group-hover:border-red-800 transition-all duration-300 uppercase tracking-widest"
+        >
           {t.projects.viewCase} <ExternalLink size={12} />
         </Link>
       </div>
@@ -83,7 +126,7 @@ export function ProjectsGrid() {
 
         <div className="flex flex-col items-center">
           <a
-            href="https://github.com/tuo-username"
+            href="https://github.com/ggbifulco"
             target="_blank"
             rel="noopener noreferrer"
             className="px-8 sm:px-10 py-3 sm:py-4 bg-white/5 border border-white/10 rounded-2xl text-gray-400 hover:text-white hover:bg-red-900 hover:border-red-700 transition-all flex items-center gap-3 uppercase tracking-[0.2em] text-[10px] font-bold shadow-lg group"

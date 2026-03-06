@@ -38,7 +38,7 @@ export const translations = {
     },
     hero: {
       title: "FUTURE",
-      subtitle: "AI Engineering & other stuffs"
+      subtitle: "AI Engineering & Research"
     },
     projects: {
       title: "PROGETTI",
@@ -114,7 +114,7 @@ export const translations = {
     },
     hero: {
       title: "FUTURE",
-      subtitle: "AI Engineering & other stuffs"
+      subtitle: "AI Engineering & Research"
     },
     projects: {
       title: "PROJECTS",

@@ -16,11 +16,11 @@ const Scene3D = dynamic(() => import("@/components/Scene3D"), {
 });
 
 const sections = [
-  { id: "hero", component: <Hero /> },
-  { id: "projects", component: <ProjectsGrid /> },
-  { id: "newsletter", component: <NewsletterPreview /> },
-  { id: "academy", component: <Academy /> },
-  { id: "about", component: <About /> },
+  { id: "hero",       label: "Home",       component: <Hero /> },
+  { id: "projects",   label: "Projects",   component: <ProjectsGrid /> },
+  { id: "newsletter", label: "Newsletter", component: <NewsletterPreview /> },
+  { id: "academy",    label: "Academy",    component: <Academy /> },
+  { id: "about",      label: "About",      component: <About /> },
 ];
 
 function HomeContent() {
@@ -85,6 +85,21 @@ function HomeContent() {
     return () => window.removeEventListener("wheel", handleWheel);
   }, [index, scrollToSection]);
 
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "ArrowDown" || e.key === "ArrowRight") {
+        e.preventDefault();
+        scrollToSection(index + 1);
+      } else if (e.key === "ArrowUp" || e.key === "ArrowLeft") {
+        e.preventDefault();
+        scrollToSection(index - 1);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [index, scrollToSection]);
+
   // Touch / swipe scroll for mobile
   useEffect(() => {
     const handleTouchStart = (e: TouchEvent) => {
@@ -131,18 +146,23 @@ function HomeContent() {
       </motion.div>
 
       {/* Section navigation dots — hidden on xs, visible from sm */}
-      <div className="hidden sm:flex fixed right-3 md:right-10 top-1/2 -translate-y-1/2 z-50 flex-col gap-3 md:gap-4">
-        {sections.map((_, i) => (
-          <button
-            key={i}
-            onClick={() => scrollToSection(i)}
-            aria-label={`Go to section ${i + 1}`}
-            className={`rounded-full transition-all duration-500 shadow-lg ${
-              index === i
-                ? "bg-red-700 h-8 w-1.5 shadow-[0_0_10px_rgba(185,28,28,0.5)]"
-                : "w-1.5 h-1.5 bg-white/10 hover:bg-white/30"
-            }`}
-          />
+      <div className="hidden sm:flex fixed right-3 md:right-8 top-1/2 -translate-y-1/2 z-50 flex-col gap-3 md:gap-4">
+        {sections.map((section, i) => (
+          <div key={i} className="relative group flex items-center justify-end">
+            {/* Tooltip label */}
+            <span className="absolute right-6 opacity-0 group-hover:opacity-100 translate-x-1 group-hover:translate-x-0 transition-all duration-200 text-[8px] uppercase tracking-widest font-bold text-white/50 whitespace-nowrap bg-black/90 border border-white/5 px-2.5 py-1 rounded-lg pointer-events-none backdrop-blur-sm">
+              {section.label}
+            </span>
+            <button
+              onClick={() => scrollToSection(i)}
+              aria-label={`Go to ${section.label}`}
+              className={`rounded-full transition-all duration-500 ${
+                index === i
+                  ? "bg-red-700 h-7 w-1.5 shadow-[0_0_12px_rgba(153,0,36,0.6)]"
+                  : "w-1.5 h-1.5 bg-white/10 hover:bg-white/25 hover:scale-125"
+              }`}
+            />
+          </div>
         ))}
       </div>
     </>
