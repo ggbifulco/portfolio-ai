@@ -5,11 +5,11 @@ import dynamic from "next/dynamic";
 import {
   Plus, Save, Trash2, ChevronRight, Search, X, Rocket,
   CheckCircle, AlertCircle, Info, Image as ImageIcon, Tag, Hash,
-  FileText, BookOpen, Newspaper, Zap, Eye, EyeOff, ArrowLeft,
+  FileText, BookOpen, Newspaper, Zap, ArrowLeft, Eye, EyeOff,
   RefreshCw, ExternalLink
 } from "lucide-react";
 
-const MDEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
+const RichEditor = dynamic(() => import("@/components/admin/RichEditor"), { ssr: false });
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 type ContentType = "newsletter" | "projects" | "courses" | "pills" | "broadcast";
@@ -371,7 +371,6 @@ export default function AdminDashboard() {
   const [toasts, setToasts] = useState<Toast[]>([]);
   const [confirmModal, setConfirmModal] = useState<{ title: string; message: string; onConfirm: () => void } | null>(null);
   const [showNewModal, setShowNewModal] = useState(false);
-  const [editorPreview, setEditorPreview] = useState<"edit" | "live" | "preview">("live");
 
   // Toast helper
   const toast = useCallback((message: string, kind: ToastKind = "info") => {
@@ -760,39 +759,28 @@ export default function AdminDashboard() {
               </div>
             </div>
 
-            {/* Markdown Editor */}
+            {/* Rich Text Editor */}
             <div className="flex-1 flex flex-col overflow-hidden">
               <div className="flex items-center justify-between px-4 py-2.5 border-b border-white/5 bg-black/20 flex-shrink-0">
                 <label className="text-[9px] uppercase tracking-widest text-zinc-500 font-black flex items-center gap-2">
-                  <FileText size={10} className="text-red-700" /> Contenuto Markdown
+                  <FileText size={10} className="text-red-700" /> Contenuto
                 </label>
-                <div className="flex gap-1">
-                  {(["edit", "live", "preview"] as const).map(mode => (
-                    <button
-                      key={mode}
-                      onClick={() => setEditorPreview(mode)}
-                      className={`px-2.5 py-1 rounded-md text-[8px] font-bold uppercase tracking-widest transition-all ${
-                        editorPreview === mode ? "bg-red-900/40 text-red-400" : "text-zinc-600 hover:text-white"
-                      }`}
-                    >
-                      {mode}
-                    </button>
-                  ))}
-                </div>
+                <span className="text-[9px] text-zinc-700 uppercase tracking-widest">Ctrl+S per salvare</span>
               </div>
-              <div className="flex-1 overflow-hidden">
-                <MDEditor
+              <div className="flex-1 overflow-hidden p-3">
+                <RichEditor
                   value={editContent}
-                  onChange={val => handleContentChange(val || "")}
-                  preview={editorPreview}
-                  height="100%"
-                  style={{ height: "100%", backgroundColor: "#09090b" }}
-                  visibleDragbar={false}
+                  onChange={handleContentChange}
+                  placeholder={
+                    activeType === "newsletter" ? "Scrivi il contenuto dell'articolo…" :
+                    activeType === "broadcast"  ? "Scrivi il corpo dell'email da inviare agli iscritti…" :
+                    "Scrivi una descrizione dettagliata…"
+                  }
                 />
               </div>
               <div className="px-4 py-2 border-t border-white/5 flex items-center justify-between text-[9px] text-zinc-700">
-                <span>{editContent.length} caratteri · {editContent.split(/\s+/).filter(Boolean).length} parole</span>
-                <span>Ctrl+S per salvare</span>
+                <span>{editContent.replace(/<[^>]+>/g, "").length} caratteri · {editContent.replace(/<[^>]+>/g, "").split(/\s+/).filter(Boolean).length} parole</span>
+                <span>HTML salvato su GitHub</span>
               </div>
             </div>
 
